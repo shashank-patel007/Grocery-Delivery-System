@@ -18,6 +18,7 @@ class UsersSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         """Create and return new user"""
+        print(validated_data)
         user= models.Users.objects.create_user(
             email=validated_data['email'],
             name=validated_data['name'],
