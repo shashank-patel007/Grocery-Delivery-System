@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import './App.css';
 import LoginRegister from './components/loginRegister/LoginRegister';
-import ProductList from './components/products/ProductList';
+// import ProductList from './components/products/ProductList';
 
 function App() {
 	return (
