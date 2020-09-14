@@ -8,12 +8,15 @@ from rest_framework.settings import api_settings
 
 from accounts import serializers
 from accounts import models
+from accounts import permissions
 # Create your views here.
 
 class UsersViewSet(viewsets.ModelViewSet):
     """Handle Creating and updating profiles"""
     serializer_class= serializers.UsersSerializer
     queryset=models.Users.objects.all()
+    authentication_classes=(TokenAuthentication,)
+    permission_classes=(permissions.UpdateUsers,)
 
 
 class UserLoginAPIView(ObtainAuthToken):
