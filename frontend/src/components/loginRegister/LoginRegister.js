@@ -19,6 +19,7 @@ import clsx from 'clsx';
 import './login-register.css';
 import Login from './Login';
 import Register from './Register';
+import Axios from 'axios';
 
 const styles = (theme) => ({
 	root: {
@@ -181,7 +182,41 @@ const LoginRegister = (props) => {
 	};
 
 	const submit = () => {
-		console.log(loginState);
+		if (!isLogin) {
+			const options = {
+				method: 'post',
+				url: 'http://127.0.0.1:8000/api/profile/',
+				data: {
+					name: registerState.userName,
+					email: registerState.email,
+					password: registerState.password,
+					mobile_no: 1234567,
+					address: 'somewhere'
+				},
+				// headers: {
+				// 	crossDomain: true,
+				// 	'Access-Control-Allow-Origin': 'http://localhost:3000',
+				// 	'Content-Type': 'application/json'
+				// },
+				transformRequest: [
+					(data, headers) => {
+						// transform the data
+
+						return data;
+					}
+				]
+			};
+
+			// send the request
+			Axios(options).then(
+				(response) => {
+					console.log(response);
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		}
 	};
 
 	return (
