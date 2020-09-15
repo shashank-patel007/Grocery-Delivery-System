@@ -5,16 +5,18 @@ import Navbar from './components/navbar/Navbar';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import './App.css';
-import LoginRegister from './components/loginRegister/LoginRegister';
+import AuthState from './context/auth/AuthState';
 
 function App() {
 	return (
-		<Router>
-			<div className='App'>
-				<Header />
-				<Navbar />
-			</div>
-		</Router>
+		<AuthState>
+			<Router>
+				<div className='App'>
+					<Header />
+					<Navbar />
+				</div>
+			</Router>
+		</AuthState>
 	);
 }
 

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import { fade, withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -20,6 +20,7 @@ import './login-register.css';
 import Login from './Login';
 import Register from './Register';
 import Axios from 'axios';
+import AuthContext from '../../context/auth/AuthContext';
 
 const styles = (theme) => ({
 	root: {
@@ -153,6 +154,8 @@ const LoginRegister = (props) => {
 		password: ''
 	});
 
+	const authContext = useContext(AuthContext);
+
 	//* These function handles the dialog box
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -182,41 +185,8 @@ const LoginRegister = (props) => {
 	};
 
 	const submit = () => {
-		if (!isLogin) {
-			const options = {
-				method: 'post',
-				url: 'http://127.0.0.1:8000/api/profile/',
-				data: {
-					name: registerState.userName,
-					email: registerState.email,
-					password: registerState.password,
-					mobile_no: 1234567,
-					address: 'somewhere'
-				},
-				// headers: {
-				// 	crossDomain: true,
-				// 	'Access-Control-Allow-Origin': 'http://localhost:3000',
-				// 	'Content-Type': 'application/json'
-				// },
-				transformRequest: [
-					(data, headers) => {
-						// transform the data
-
-						return data;
-					}
-				]
-			};
-
-			// send the request
-			Axios(options).then(
-				(response) => {
-					console.log(response);
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
-		}
+		if (!isLogin) authContext.register(registerState);
+		else authContext.login(loginState);
 	};
 
 	return (
