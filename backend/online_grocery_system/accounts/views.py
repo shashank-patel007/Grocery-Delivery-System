@@ -16,7 +16,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     serializer_class= serializers.UsersSerializer
     queryset=models.Users.objects.all()
     authentication_classes=(TokenAuthentication,)
-    permission_classes=(permissions.UpdateUsers,)
+    # permission_classes=(permissions.UpdateUsers,)
 
 
 class UserLoginAPIView(ObtainAuthToken):
