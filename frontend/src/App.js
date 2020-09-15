@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 
 import './App.css';
 import LoginRegister from './components/loginRegister/LoginRegister';
-// import ProductList from './components/products/ProductList';
 
 function App() {
 	return (
@@ -14,7 +13,6 @@ function App() {
 			<div className='App'>
 				<Header />
 				<Navbar />
-				{/* <ProductList /> */}
 			</div>
 		</Router>
 	);
