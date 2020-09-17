@@ -6,6 +6,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import IconButton from '@material-ui/core/IconButton';
+import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -30,12 +31,13 @@ const Register = (props) => {
 	return (
 		<Fragment>
 			<TextField
-				id='login-username'
+				id='register-username'
 				type='text'
 				color='primary'
-				value={values.userName}
+				required
+				value={values.name}
 				label='User Name'
-				onChange={handleInputChange('userName')}
+				onChange={handleInputChange('name')}
 				InputProps={{
 					endAdornment: (
 						<InputAdornment position='end' style={{ padding: '12px' }}>
@@ -45,9 +47,10 @@ const Register = (props) => {
 				}}
 			/>
 			<TextField
-				id='login-email'
+				id='register-email'
 				type='email'
 				className={classes.textfield}
+				required
 				color='primary'
 				value={values.email}
 				label='E-Mail'
@@ -61,10 +64,11 @@ const Register = (props) => {
 				}}
 			/>
 			<TextField
-				id='sloginpassword'
+				id='register-password'
 				className={classes.textfield}
 				type={showPassword ? 'text' : 'password'}
 				color='primary'
+				required
 				value={values.password}
 				label='Password'
 				onChange={handleInputChange('password')}
@@ -78,6 +82,40 @@ const Register = (props) => {
 							>
 								{showPassword ? <Visibility /> : <VisibilityOff />}
 							</IconButton>
+						</InputAdornment>
+					)
+				}}
+			/>
+			<TextField
+				id='register-mobileno'
+				type='tel'
+				className={classes.textfield}
+				color='primary'
+				required
+				value={values.mobile_no}
+				label='Mobile Number'
+				onChange={handleInputChange('mobile_no')}
+				InputProps={{
+					endAdornment: (
+						<InputAdornment position='end' style={{ padding: '12px' }}>
+							<PhoneIphoneIcon />
+						</InputAdornment>
+					)
+				}}
+			/>
+			<TextField
+				id='register-address'
+				type='text'
+				className={classes.textfield}
+				color='primary'
+				required
+				value={values.mobile_no}
+				label='Address'
+				onChange={handleInputChange('address')}
+				InputProps={{
+					endAdornment: (
+						<InputAdornment position='end' style={{ padding: '12px' }}>
+							<PhoneIphoneIcon />
 						</InputAdornment>
 					)
 				}}

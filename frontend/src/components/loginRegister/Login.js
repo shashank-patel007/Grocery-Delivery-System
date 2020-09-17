@@ -31,6 +31,7 @@ const Login = (props) => {
 			<TextField
 				id='login-email'
 				type='email'
+				required
 				color='primary'
 				value={values.email}
 				label='E-Mail'
@@ -44,12 +45,13 @@ const Login = (props) => {
 				}}
 			/>
 			<TextField
-				id='sloginpassword'
+				id='login-password'
 				className={classes.textfield}
 				type={showPassword ? 'text' : 'password'}
 				color='primary'
 				value={values.password}
 				label='Password'
+				required
 				onChange={handleInputChange('password')}
 				InputProps={{
 					endAdornment: (

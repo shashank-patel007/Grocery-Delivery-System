@@ -8,18 +8,12 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-// import TextField from '@material-ui/core/TextField';
-// import InputAdornment from '@material-ui/core/InputAdornment';
-// import Visibility from '@material-ui/icons/Visibility';
-// import VisibilityOff from '@material-ui/icons/VisibilityOff';
-// import EmailIcon from '@material-ui/icons/Email';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import './login-register.css';
 import Login from './Login';
 import Register from './Register';
-import Axios from 'axios';
 import AuthContext from '../../context/auth/AuthContext';
 
 const styles = (theme) => ({
@@ -149,9 +143,11 @@ const LoginRegister = (props) => {
 	});
 
 	const [ registerState, setRegisterState ] = useState({
-		userName: '',
+		name: '',
 		email: '',
-		password: ''
+		password: '',
+		mobile_no: '',
+		address: ''
 	});
 
 	const authContext = useContext(AuthContext);
@@ -159,19 +155,51 @@ const LoginRegister = (props) => {
 	//* These function handles the dialog box
 	const handleClickOpen = () => {
 		setOpen(true);
+		setLoginState({
+			email: '',
+			password: ''
+		});
+		setRegisterState({
+			name: '',
+			email: '',
+			password: '',
+			mobile_no: null
+		});
+		setIsLogin(true);
 	};
 	const handleClose = () => {
 		setOpen(false);
+		setLoginState({
+			email: '',
+			password: ''
+		});
+		setRegisterState({
+			name: '',
+			email: '',
+			password: '',
+			mobile_no: null
+		});
+		setIsLogin(true);
 	};
 	//**  -------   *** ------**//
 
 	//**These functions handles login and register form */
 	const setToRegister = () => {
 		setIsLogin(false);
+		setLoginState({
+			email: '',
+			password: ''
+		});
 	};
 
 	const setToLogin = () => {
 		setIsLogin(true);
+		setRegisterState({
+			name: '',
+			email: '',
+			password: '',
+			mobile_no: ''
+		});
 	};
 
 	// ** This function is handle input change of Login form
@@ -185,8 +213,14 @@ const LoginRegister = (props) => {
 	};
 
 	const submit = () => {
-		if (!isLogin) authContext.register(registerState);
-		else authContext.login(loginState);
+		if (!isLogin) {
+			console.log(authContext.register(registerState));
+			// setIsLogin(val);
+		} else authContext.login(loginState);
+
+		if (authContext.isLoggedIn) {
+			handleClose();
+		}
 	};
 
 	return (
@@ -196,7 +230,7 @@ const LoginRegister = (props) => {
 				className={clsx(classes.button, classes.user, classes.defaultButton)}
 				onClick={handleClickOpen}
 			>
-				<span>Login/SignUp</span>
+				{authContext.isLoggedIn ? <span>Welcome User</span> : <span> Login/SignUp </span>}
 			</IconButton>
 			<Dialog
 				onClose={handleClose}
