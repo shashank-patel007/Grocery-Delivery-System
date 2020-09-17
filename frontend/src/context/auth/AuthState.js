@@ -32,26 +32,23 @@ const AuthState = (props) => {
 
 		Axios(config)
 			.then((response) => {
-				console.log(JSON.stringify(response.data));
-				alert('Registered Successfully');
-				// return true;
+				console.log(JSON.stringify(response.data.token));
+				alert('Logged In Successfully');
+				dispatch({
+					type: LOGIN_REGISTER,
+					payload: {
+						name: '',
+						email: data.email,
+						mobile_no: '',
+						address: '',
+						isLoggedIn: true,
+						token: response.data.token
+					}
+				});
 			})
 			.catch(function(error) {
 				console.log(error);
-				// return false;
 			});
-		return true;
-
-		// dispatch({
-		// 	type: LOGIN_REGISTER,
-		// 	payload: {
-		// 		userName: 'Chaitya',
-		// 		email: 'test@test.com',
-		// 		number: '9920451635',
-		// 		address: 'somewhere',
-		// 		token: 'TOKEN'
-		// 	}
-		// });
 	};
 
 	const register = (data) => {

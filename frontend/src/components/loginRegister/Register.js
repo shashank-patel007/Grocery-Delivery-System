@@ -103,6 +103,23 @@ const Register = (props) => {
 					)
 				}}
 			/>
+			<TextField
+				id='register-address'
+				type='text'
+				className={classes.textfield}
+				color='primary'
+				required
+				value={values.mobile_no}
+				label='Address'
+				onChange={handleInputChange('address')}
+				InputProps={{
+					endAdornment: (
+						<InputAdornment position='end' style={{ padding: '12px' }}>
+							<PhoneIphoneIcon />
+						</InputAdornment>
+					)
+				}}
+			/>
 		</Fragment>
 	);
 };

@@ -146,7 +146,8 @@ const LoginRegister = (props) => {
 		name: '',
 		email: '',
 		password: '',
-		mobile_no: null
+		mobile_no: '',
+		address: ''
 	});
 
 	const authContext = useContext(AuthContext);
@@ -216,6 +217,10 @@ const LoginRegister = (props) => {
 			console.log(authContext.register(registerState));
 			// setIsLogin(val);
 		} else authContext.login(loginState);
+
+		if (authContext.isLoggedIn) {
+			handleClose();
+		}
 	};
 
 	return (
@@ -225,7 +230,7 @@ const LoginRegister = (props) => {
 				className={clsx(classes.button, classes.user, classes.defaultButton)}
 				onClick={handleClickOpen}
 			>
-				<span>Login/SignUp</span>
+				{authContext.isLoggedIn ? <span>Welcome User</span> : <span> Login/SignUp </span>}
 			</IconButton>
 			<Dialog
 				onClose={handleClose}
