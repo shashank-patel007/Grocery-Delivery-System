@@ -4,9 +4,9 @@ export default (state, action) => {
 	switch (action.type) {
 		case LOGIN_REGISTER:
 			return {
-				userName: action.payload.userName,
+				name: action.payload.userName,
 				email: action.payload.email,
-				number: action.payload.number,
+				mobile_no: action.payload.number,
 				address: action.payload.address,
 				isLoggedIn: true,
 				token: action.payload.token

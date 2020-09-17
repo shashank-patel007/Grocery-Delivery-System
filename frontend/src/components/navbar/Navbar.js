@@ -82,9 +82,9 @@ const CustomListItem = withStyles({
 
 const CustomButton = withStyles({
 	root: {
-		height: '100%',
+		// height: '90%',
 		fontSize: '1.5em',
-		padding: '10px 30px',
+		padding: '0.3rem 2rem',
 		color: '#fff',
 		border: 'none',
 		outline: 'none',

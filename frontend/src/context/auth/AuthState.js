@@ -7,9 +7,9 @@ import { LOGIN_REGISTER, SIGN_OUT } from '../types';
 
 const AuthState = (props) => {
 	const initialState = {
-		userName: '',
+		name: '',
 		email: '',
-		number: '',
+		mobile_no: '',
 		address: '',
 		isLoggedIn: false,
 		token: ''
@@ -18,52 +18,76 @@ const AuthState = (props) => {
 	const [ state, dispatch ] = useReducer(AuthReducer, initialState);
 
 	const login = (data) => {
-		console.log('Logging In....');
-		console.log('Succesfully Logged in');
-		const options = {
-			method: 'get',
-			url: 'http://127.0.0.1:8000/api/profile/',
-			transformRequest: [
-				(data, headers) => {
-					// transform the data
-
-					return data;
-				}
-			]
-		};
-		Axios(options).then(
-			(response) => {
-				console.log(response);
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/api/login/',
+			headers: {
+				'Content-Type': 'application/json'
 			},
-			(error) => {
+			data: JSON.stringify({
+				username: data.email,
+				password: data.password
+			})
+		};
+
+		Axios(config)
+			.then((response) => {
+				console.log(JSON.stringify(response.data));
+				alert('Registered Successfully');
+				// return true;
+			})
+			.catch(function(error) {
 				console.log(error);
-			}
-		);
-		dispatch({
-			type: LOGIN_REGISTER,
-			payload: {
-				userName: 'Chaitya',
-				email: 'test@test.com',
-				number: '9920451635',
-				address: 'somewhere',
-				token: 'TOKEN'
-			}
-		});
+				// return false;
+			});
+		return true;
+
+		// dispatch({
+		// 	type: LOGIN_REGISTER,
+		// 	payload: {
+		// 		userName: 'Chaitya',
+		// 		email: 'test@test.com',
+		// 		number: '9920451635',
+		// 		address: 'somewhere',
+		// 		token: 'TOKEN'
+		// 	}
+		// });
 	};
 
 	const register = (data) => {
-		console.log('Logging In....');
-		console.log('Succesfully Logged in');
-		dispatch({
-			type: LOGIN_REGISTER,
-			payload: {
-				userName: data.name,
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/api/profile/',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			data: JSON.stringify({
 				email: data.email,
-				number: '9920451635',
-				address: 'somewhere',
-				token: 'TOKEN'
-			}
-		});
+				password: data.password,
+				mobile_no: data.mobile_no,
+				name: data.name
+			})
+		};
+
+		Axios(config)
+			.then(function(response) {
+				console.log(JSON.stringify(response.data));
+				dispatch({
+					type: LOGIN_REGISTER,
+					payload: {
+						name: response.data.name,
+						email: response.data.email,
+						mobile_no: response.data.mobile_no,
+						address: response.data.address,
+						isLoggedIn: true,
+						token: 'TOKEN'
+					}
+				});
+				alert('Registered Successfully');
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
 	};
 
 	const logout = () => {};
