@@ -18,7 +18,6 @@ class UsersSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         """Create and return new user"""
-        print(validated_data)
         if 'address' in validated_data.keys():
                 user= models.Users.objects.create_user(
                 email=validated_data['email'],
@@ -32,5 +31,4 @@ class UsersSerializer(serializers.ModelSerializer):
             name=validated_data['name'],
             mobile_no=validated_data['mobile_no'],
             password=validated_data['password'],address="NA")
-
         return user
