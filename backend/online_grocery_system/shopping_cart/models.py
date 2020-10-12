@@ -1,6 +1,7 @@
 from django.db import models
 from products.models import Product
 from django.contrib.auth.models import User
+from accounts.models import Users
 
 
 class CartItem(models.Model):
@@ -17,7 +18,7 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     total = models.DecimalField(
         max_digits=1000, decimal_places=2, default=0.00)
     # the date-time when the cart if first instanciated
