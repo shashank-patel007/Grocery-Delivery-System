@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Product from './Product';
 import Container from '@material-ui/core/Container';
 import img from '../../assets/img-1.jpg';
+import ProductContext from '../../context/product/ProductContext';
+import { useEffect } from 'react';
+import Axios from 'axios';
 
 const PRODUCTS = [
 	{
 		id: '1',
-		name: 'Orange',
+		name: 'Item 1',
 		price: '50',
 		description: 'Fresh directly from farms to you.',
 		stock: true,
@@ -14,7 +17,7 @@ const PRODUCTS = [
 	},
 	{
 		id: '2',
-		name: 'Orange',
+		name: 'Item 2',
 		price: '50',
 		description: 'Fresh directly from farms to you.',
 		stock: true,
@@ -23,9 +26,11 @@ const PRODUCTS = [
 ];
 
 const ProductList = () => {
+	const { products } = useContext(ProductContext);
+
 	return (
 		<Container style={userStyle}>
-			{PRODUCTS.map((product) => <Product key={product.id} product={product} />)}
+			{products.map((product) => <Product key={product.id} product={product} />)}
 		</Container>
 	);
 };

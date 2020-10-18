@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade, makeStyles } from '@material-ui/core/styles';
+import ProductContext from '../../context/product/ProductContext';
 
 const useStyles = makeStyles((theme) => ({
 	search: {
@@ -46,6 +47,36 @@ const useStyles = makeStyles((theme) => ({
 
 const Search = () => {
 	const classes = useStyles();
+	const [ state, setState ] = useState(0);
+	const { value, changeValue, getProducts } = useContext(ProductContext);
+
+	useEffect(
+		() => {
+			if (value === '' && state === 0) {
+				getProducts();
+				setState(1);
+			}
+		},
+		[ value, getProducts, state ]
+	);
+
+	const onChange = (e) => {
+		changeValue(e.target.value);
+		console.log('changed');
+	};
+
+	const onSearch = (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			if (e.target.value === '') {
+				//Handle empty input
+			} else {
+				// console.log(text);
+				changeValue('');
+			}
+		}
+	};
+
 	return (
 		<div className={classes.search}>
 			<div className={classes.searchIcon}>
@@ -57,6 +88,9 @@ const Search = () => {
 					root: classes.inputRoot,
 					input: classes.inputInput
 				}}
+				value={value}
+				onChange={onChange}
+				onKeyPress={onSearch}
 			/>
 		</div>
 	);

@@ -1,5 +1,5 @@
-import React from 'react';
-import { fade, makeStyles, createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -7,7 +7,9 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import { SetUser } from '../../services/storage.service';
+import LoginRegister from '../loginRegister/LoginRegister';
 
 const customTheme = createMuiTheme({
 	palette: {
@@ -112,10 +114,21 @@ const CustomButton = withStyles({
 
 export default function PrimarySearchAppBar() {
 	const classes = useStyles();
-	const [ selectedIndex, setSelectedIndex ] = React.useState(0);
+	const [ selectedIndex, setSelectedIndex ] = useState(0);
+	const [ open, setOpen ] = useState(false);
+
+	const history = useHistory();
 
 	const handleListItemClick = (event, index) => {
 		setSelectedIndex(index);
+	};
+
+	const handleClick = () => {
+		if (SetUser.getUser()) {
+			history.push('/cart');
+		} else {
+			setOpen(true);
+		}
 	};
 
 	return (
@@ -130,7 +143,7 @@ export default function PrimarySearchAppBar() {
 								selected={selectedIndex === 0}
 								onClick={(event) => handleListItemClick(event, 0)}
 							>
-								<NavLink to='/hdhd' activeClassName={classes.link}>
+								<NavLink to='/home' activeClassName={classes.link}>
 									<ListItemText style={{ textAlign: 'left', paddingLeft: '10px' }} primary='Home' />
 								</NavLink>
 							</CustomListItem>
@@ -162,10 +175,16 @@ export default function PrimarySearchAppBar() {
 							</CustomListItem>
 						</List>
 						<div className={classes.grow} />
-						<CustomButton startIcon={<ShoppingCartIcon style={{ fontSize: '1em' }} />}>Cart</CustomButton>
+						<CustomButton
+							onClick={handleClick}
+							startIcon={<ShoppingCartIcon style={{ fontSize: '1em' }} />}
+						>
+							Cart
+						</CustomButton>
 					</Toolbar>
 				</AppBar>
 			</div>
+			{open && <LoginRegister handleClose={() => setOpen(false)} open={open} />}
 		</MuiThemeProvider>
 	);
 }

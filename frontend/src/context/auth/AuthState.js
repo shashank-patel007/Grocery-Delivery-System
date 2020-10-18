@@ -4,23 +4,24 @@ import AuthReducer from './AuthReducer';
 import AuthContext from './AuthContext';
 
 import { LOGIN_REGISTER, SIGN_OUT } from '../types';
+import { SetUser, TokenService } from '../../services/storage.service';
 
 const AuthState = (props) => {
-	const initialState = {
-		name: '',
-		email: '',
-		mobile_no: '',
-		address: '',
-		isLoggedIn: false,
-		token: ''
-	};
+	// const initialState = {
+	// 	name: '',
+	// 	email: '',
+	// 	mobile_no: '',
+	// 	address: '',
+	// 	isLoggedIn: false,
+	// 	token: ''
+	// };
 
-	const [ state, dispatch ] = useReducer(AuthReducer, initialState);
+	// const [ state, dispatch ] = useReducer(AuthReducer, initialState);
 
-	const login = (data) => {
+	const login = async (data) => {
 		var config = {
 			method: 'post',
-			url: 'http://127.0.0.1:8000/api/login/',
+			url: 'http://127.0.0.1:8000/login/',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -29,32 +30,42 @@ const AuthState = (props) => {
 				password: data.password
 			})
 		};
+		let res = false;
 
-		Axios(config)
+		await Axios(config)
 			.then((response) => {
-				console.log(JSON.stringify(response.data.token));
+				console.log(JSON.stringify(response.data));
 				alert('Logged In Successfully');
-				dispatch({
-					type: LOGIN_REGISTER,
-					payload: {
-						name: '',
-						email: data.email,
-						mobile_no: '',
-						address: '',
-						isLoggedIn: true,
-						token: response.data.token
-					}
+				// dispatch({
+				// 	type: LOGIN_REGISTER,
+				// 	payload: {
+				// 		name: response.data.name,
+				// 		email: response.data.email,
+				// 		mobile_no: response.data.mobile_no,
+				// 		address: response.data.address,
+				// 		isLoggedIn: true,
+				// 		token: response.data.token
+				// 	}
+				// });
+				res = true;
+				SetUser.saveUser({
+					name: response.data.name,
+					email: response.data.email,
+					mobile_no: response.data.mobile_no,
+					address: response.data.address
 				});
+				TokenService.saveToken(response.data.token);
 			})
 			.catch(function(error) {
 				console.log(error);
 			});
+		return res;
 	};
 
-	const register = (data) => {
+	const register = async (data) => {
 		var config = {
 			method: 'post',
-			url: 'http://127.0.0.1:8000/api/profile/',
+			url: 'http://127.0.0.1:8000/profile/',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -62,29 +73,22 @@ const AuthState = (props) => {
 				email: data.email,
 				password: data.password,
 				mobile_no: data.mobile_no,
-				name: data.name
+				name: data.name,
+				address: data.address
 			})
 		};
+		let res = false;
 
-		Axios(config)
+		await Axios(config)
 			.then(function(response) {
 				console.log(JSON.stringify(response.data));
-				dispatch({
-					type: LOGIN_REGISTER,
-					payload: {
-						name: response.data.name,
-						email: response.data.email,
-						mobile_no: response.data.mobile_no,
-						address: response.data.address,
-						isLoggedIn: true,
-						token: 'TOKEN'
-					}
-				});
 				alert('Registered Successfully');
+				res = login({ email: data.email, password: data.password });
 			})
 			.catch(function(error) {
 				console.log(error);
 			});
+		return res;
 	};
 
 	const logout = () => {};
@@ -92,11 +96,6 @@ const AuthState = (props) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				userName: state.userName,
-				email: state.email,
-				isLoggedIn: state.isLoggedIn,
-				token: state.token,
-				address: state.address,
 				login,
 				register,
 				logout
