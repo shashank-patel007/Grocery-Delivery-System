@@ -8,6 +8,7 @@ from rest_framework.settings import api_settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 
 from accounts import serializers
 from accounts import models
@@ -19,7 +20,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     serializer_class= serializers.UsersSerializer
     queryset=models.Users.objects.all()
     authentication_classes=(TokenAuthentication,)
-    permission_classes=(permissions.UpdateUsers,)
+    permission_classes=(AllowAny,)
 
     def get_object(self):
         pk = self.kwargs.get('pk')
@@ -32,6 +33,7 @@ class UsersViewSet(viewsets.ModelViewSet):
 
 class UserLoginAPIView(ObtainAuthToken):
     """Handle creating user authentication tokens"""
+    permission_classes=(AllowAny,)
     renderer_classes= api_settings.DEFAULT_RENDERER_CLASSES
     def post(self, request, *args, **kwargs):
         response = super(UserLoginAPIView, self).post(request, *args, **kwargs)
