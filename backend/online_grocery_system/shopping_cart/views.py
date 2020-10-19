@@ -87,18 +87,20 @@ class CartView(APIView):
 
         item_list = []
         for item in all_items:
-            i = dict()
-            i["Item Name"] = item.product.name
-            i["Quantity"] = item.quantity
-            i["Subtotal"] = item.subTotal
-
+            i = dict() 
+            i["name"] = item.product.name
+            i["quantity"] = item.quantity
+            i["subtotal"] = item.subTotal
+            i["price"] = item.product.price
+            i["id"] = item.product.id
+            i['image'] = r'http://127.0.0.1:8000/media/{}'.format(item.product.image)
             item_list.append(i)
 
         response = {
-            'Cart ID': serializer_cart.data['id'],
-            'Cart Owner': user.name,
-            'Total': serializer_cart.data['total'],
-            'Cart Items': item_list
+            'cartID': serializer_cart.data['id'],
+            'cartOwner': user.name,
+            'total': serializer_cart.data['total'],
+            'cartItems': item_list
         }
 
         return Response(response, status=200)
