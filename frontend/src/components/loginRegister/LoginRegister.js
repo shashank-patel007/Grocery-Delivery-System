@@ -13,6 +13,7 @@ import './login-register.css';
 import Login from './Login';
 import Register from './Register';
 import AuthContext from '../../context/auth/AuthContext';
+import { useAlert } from 'react-alert';
 
 const styles = (theme) => ({
 	root: {
@@ -72,6 +73,7 @@ const theme = createMuiTheme({
 });
 
 const useStyles = makeStyles({
+	root: { zIndex: 1 },
 	button: {
 		fontSize: '1em',
 		color: '#2B2F4C',
@@ -119,18 +121,6 @@ const LoginRegister = ({ handleClose, open }) => {
 	const [ isLogin, setIsLogin ] = useState(true);
 
 	const authContext = useContext(AuthContext);
-
-	//* These function handles the dialog box
-	// const handleClickOpen = () => {
-	// 	setOpen(true);
-	// 	setIsLogin(true);
-	// };
-	// const handleClose = () => {
-	// 	setOpen(false);
-	// 	setIsLogin(true);
-	// };
-	//**  -------   *** ------**//
-
 	//**These functions handles login and register form */
 	const setToRegister = () => {
 		setIsLogin(false);

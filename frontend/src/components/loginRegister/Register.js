@@ -1,5 +1,4 @@
 import React, { useState, Fragment, useContext } from 'react';
-import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -12,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import AuthContext from '../../context/auth/AuthContext';
+import CartContext from '../../context/cart/CartContext';
+import { useAlert } from 'react-alert';
 
 const useStyles = makeStyles({
 	textfield: {
@@ -46,7 +47,9 @@ const useStyles = makeStyles({
 
 const Register = (props) => {
 	const classes = useStyles();
+	const Alert = useAlert();
 	const authContext = useContext(AuthContext);
+	const { getCart } = useContext(CartContext);
 	const { setToLogin } = props;
 	const [ showPassword, setShowPassword ] = useState(false);
 	const [ registerState, setRegisterState ] = useState({
@@ -56,9 +59,17 @@ const Register = (props) => {
 		mobile_no: '',
 		address: ''
 	});
+	const [ emailResult, setEmailResult ] = useState({
+		isError: false,
+		message: ''
+	});
+	const [ mobileResult, setMobileResult ] = useState({
+		isError: false,
+		message: ''
+	});
 
 	const handleInputChange = (prop) => (event) => {
-		setRegisterState({ ...registerState, [prop]: event.target.value });
+		setRegisterState({ ...registerState, [prop]: event.target.value || '' });
 	};
 
 	const handleClickShowPassword = () => {
@@ -69,9 +80,26 @@ const Register = (props) => {
 		event.preventDefault();
 	};
 	const handleSubmit = async () => {
-		let result = await authContext.register(registerState);
-		if (result) props.handleClose();
-		// document.location.reload(true);
+		setEmailResult({});
+		setMobileResult({});
+		let res = await authContext.register(registerState);
+		if (res.success) {
+			props.handleClose();
+			getCart();
+			Alert.success('Registered Succesfully...');
+		} else if (res.error.mobile_no && res.error.email) {
+			setRegisterState({ ...registerState, email: '', mobile_no: '' });
+			setEmailResult({ isError: true, message: 'Email already exits..' });
+			setMobileResult({ isError: true, message: 'Mobile number already taken..' });
+		} else if (res.error.mobile_no) {
+			console.log('mobile');
+			setRegisterState({ ...registerState, mobile_no: '' });
+			setMobileResult({ isError: true, message: 'Mobile number already taken..' });
+		} else if (res.error.email) {
+			console.log('email');
+			setRegisterState({ ...registerState, email: '' });
+			setEmailResult({ isError: true, message: 'Email already exits..' });
+		}
 	};
 
 	return (
@@ -95,6 +123,8 @@ const Register = (props) => {
 			/>
 			<TextValidator
 				id='register-email'
+				error={emailResult.isError}
+				helperText={emailResult.message}
 				type='email'
 				validators={[ 'required', 'isEmail' ]}
 				errorMessages={[ 'this field is required', 'email is not valid' ]}
@@ -138,6 +168,8 @@ const Register = (props) => {
 			/>
 			<TextValidator
 				id='register-mobileno'
+				error={mobileResult.isError}
+				helperText={mobileResult.message}
 				type='tel'
 				className={classes.textfield}
 				color='primary'

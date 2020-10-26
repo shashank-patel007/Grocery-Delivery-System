@@ -1,5 +1,4 @@
 import React, { useState, Fragment, useContext } from 'react';
-import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -10,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import AuthContext from '../../context/auth/AuthContext';
 import CartContext from '../../context/cart/CartContext';
+import { useEffect } from 'react';
+import { useAlert } from 'react-alert';
 
 const useStyles = makeStyles({
 	textfield: {
@@ -44,8 +45,13 @@ const useStyles = makeStyles({
 
 const Login = (props) => {
 	const classes = useStyles();
+	const alert = useAlert();
 	const authContext = useContext(AuthContext);
-	// const { setCart } = useContext(CartContext);
+	const { getCart } = useContext(CartContext);
+	const [ result, setResult ] = useState({
+		success: true,
+		errorMessage: ''
+	});
 
 	const { setToRegister } = props;
 	const [ showPassword, setShowPassword ] = useState(false);
@@ -67,67 +73,78 @@ const Login = (props) => {
 	};
 
 	async function handleSubmit() {
-		let result = await authContext.login(loginState);
-		if (result) props.handleClose();
-		// setCart();
-		// document.location.reload(true);
+		let res = await authContext.login(loginState);
+		console.log(res);
+		// setResult({ success: res.success });
+		if (res.success) {
+			props.handleClose();
+			getCart();
+			alert.success('Logged in Succesfully..');
+		} else if (res.error.non_field_errors) {
+			setLoginState({ ...loginState, password: '' });
+			setResult({ success: false, errorMessage: 'Entered credentials dont match!' });
+		}
 	}
 
 	return (
-		<ValidatorForm onSubmit={handleSubmit}>
-			<TextValidator
-				id='login-email'
-				type='email'
-				validators={[ 'required', 'isEmail' ]}
-				errorMessages={[ 'this field is required', 'email is not valid' ]}
-				color='primary'
-				value={loginState.email}
-				label='E-Mail'
-				onChange={handleInputChange('email')}
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position='end' style={{ padding: '12px' }}>
-							<EmailIcon />
-						</InputAdornment>
-					)
-				}}
-			/>
-			<TextValidator
-				id='login-password'
-				className={classes.textfield}
-				type={showPassword ? 'text' : 'password'}
-				color='primary'
-				value={loginState.password}
-				label='Password'
-				validators={[ 'required' ]}
-				errorMessages={[ 'this field is required' ]}
-				onChange={handleInputChange('password')}
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position='end'>
-							<IconButton
-								aria-label='toggle password visibility'
-								onClick={handleClickShowPassword}
-								onMouseDown={handleMouseDownPassword}
-								tabIndex='-1'
-							>
-								{showPassword ? <Visibility /> : <VisibilityOff />}
-							</IconButton>
-						</InputAdornment>
-					)
-				}}
-			/>
-			<Button type='submit' color='secondary' fullWidth variant='contained' className={classes.defaultButton}>
-				Login
-			</Button>
+		<Fragment>
+			<ValidatorForm onSubmit={handleSubmit}>
+				<TextValidator
+					id='login-email'
+					type='email'
+					validators={[ 'required', 'isEmail' ]}
+					errorMessages={[ 'this field is required', 'email is not valid' ]}
+					color='primary'
+					value={loginState.email}
+					label='E-Mail'
+					onChange={handleInputChange('email')}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position='end' style={{ padding: '12px' }}>
+								<EmailIcon />
+							</InputAdornment>
+						)
+					}}
+				/>
+				<TextValidator
+					id='login-password'
+					error={!result.success}
+					helperText={result.errorMessage}
+					className={classes.textfield}
+					type={showPassword ? 'text' : 'password'}
+					color='primary'
+					value={loginState.password}
+					label='Password'
+					validators={[ 'required' ]}
+					errorMessages={[ 'this field is required' ]}
+					onChange={handleInputChange('password')}
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position='end'>
+								<IconButton
+									aria-label='toggle password visibility'
+									onClick={handleClickShowPassword}
+									onMouseDown={handleMouseDownPassword}
+									tabIndex='-1'
+								>
+									{showPassword ? <Visibility /> : <VisibilityOff />}
+								</IconButton>
+							</InputAdornment>
+						)
+					}}
+				/>
+				<Button type='submit' color='secondary' fullWidth variant='contained' className={classes.defaultButton}>
+					Login
+				</Button>
 
-			<p style={{ margin: '10px 0' }}>
-				Looking to{' '}
-				<span onClick={setToRegister} className={classes.link}>
-					create an account
-				</span>
-			</p>
-		</ValidatorForm>
+				<p style={{ margin: '10px 0' }}>
+					Looking to{' '}
+					<span onClick={setToRegister} className={classes.link}>
+						create an account
+					</span>
+				</p>
+			</ValidatorForm>
+		</Fragment>
 	);
 };
 
