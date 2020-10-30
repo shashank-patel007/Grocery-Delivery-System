@@ -12,6 +12,7 @@ import Cart from './components/cart/Cart';
 import { SetUser } from './services/storage.service';
 import LoginRegister from './components/loginRegister/LoginRegister';
 import ProductState from './context/product/ProductState';
+import CategoryList from './components/categories/CategoryList';
 
 function App() {
 	return (
@@ -24,7 +25,10 @@ function App() {
 							<Navbar />
 							<Switch>
 								{SetUser.getUser() && <Route excat path='/cart' component={Cart} />}
-								<ProductList />
+								<Route excat path='/home'>
+									<CategoryList />
+									<ProductList />
+								</Route>
 							</Switch>
 						</div>
 					</Router>
