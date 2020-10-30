@@ -107,7 +107,7 @@ const Header = () => {
 				<AppBar position='static'>
 					<Toolbar>
 						<Typography className={classes.title} variant='h4' noWrap>
-							Logo
+							Grocers
 						</Typography>
 						<Search />
 						<div className={classes.grow} />

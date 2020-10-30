@@ -58,7 +58,7 @@ const CartItem = ({ product }) => {
 					<IconButton
 						variant='outlined'
 						color='secondary'
-						onClick={() => decrease(product)}
+						onClick={() => decrease(product, false)}
 						className={classes.expand}
 						style={{
 							marginRight: '0.5rem'
@@ -85,7 +85,10 @@ const CartItem = ({ product }) => {
 				<IconButton
 					variant='outlined'
 					color='secondary'
-					onClick={() => increase(product)}
+					onClick={() => {
+						console.log(product);
+						increase(product, false);
+					}}
 					className={classes.expand}
 					// style={{
 					// 	marginRight: '0.5rem'

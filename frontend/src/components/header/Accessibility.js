@@ -71,7 +71,7 @@ const Accessibility = () => {
 	const logout = () => {
 		SetUser.removeUser();
 		removeCart();
-		history.push('/');
+		history.push('/home');
 		setAnchorEl(null);
 	};
 

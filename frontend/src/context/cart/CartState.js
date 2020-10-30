@@ -6,13 +6,14 @@ import { SetUser, TokenService } from '../../services/storage.service';
 import Axios from 'axios';
 
 const CartState = ({ children }) => {
-	var storage = [];
-	if (SetUser.getUser()) {
-		storage = localStorage.getItem(`CART-${SetUser.getUser().name}`)
-			? JSON.parse(localStorage.getItem(`CART-${SetUser.getUser().name}`))
-			: [];
-	}
-	const initialState = { cartItems: storage, ...sumItems(storage), checkout: false };
+	// var storage = [];
+	// if (SetUser.getUser()) {
+	// 	storage = localStorage.getItem(`CART-${SetUser.getUser().name}`)
+	// 		? JSON.parse(localStorage.getItem(`CART-${SetUser.getUser().name}`))
+	// 		: [];
+	// }
+	// const initialState = { cartItems: storage, ...sumItems(storage), checkout: false };
+	const initialState = { cartItems: [], total: 0, cartId: '', cartOwner: '' };
 	const [ state, dispatch ] = useReducer(CartReducer, initialState);
 
 	const findQuantity = (product) => {
@@ -20,37 +21,108 @@ const CartState = ({ children }) => {
 		return item.quantity;
 	};
 
-	const increase = async (payload) => {
-		console.log(payload);
+	const getCart = async () => {
 		var config = {
-			method: 'post',
+			method: 'get',
 			url: 'http://127.0.0.1:8000/shopping_cart/',
 			headers: {
-				Authorization: 'Token ea92deec10c9eadd67db0d3c24450325ae3b2e2b',
+				Authorization: `Token ${TokenService.getToken()}`,
 				'Content-Type': 'application/json'
-			},
-			data: {
-				product_id: payload.id,
-				qty: findQuantity(payload) + 1
 			}
 		};
 
 		await Axios(config).then((response) => {
-			console.log(response.data);
+			const res = response.data;
+			dispatch({ type: 'SET_CART', payload: res });
 		});
-		dispatch({ type: 'INCREASE', payload });
 	};
 
-	const decrease = (payload) => {
-		dispatch({ type: 'DECREASE', payload });
+	const increase = async (payload, flag) => {
+		var qty = 0;
+		if (flag) qty = findQuantity(payload);
+		else qty = payload.quantity;
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/shopping_cart/',
+			headers: {
+				Authorization: `Token ${TokenService.getToken()}`,
+				'Content-Type': 'application/json'
+			},
+			data: {
+				product_id: payload.id,
+				qty: qty + 1
+			}
+		};
+
+		await Axios(config).then((response) => {
+			const res = response.data;
+			dispatch({ type: 'SET_CART', payload: res });
+		});
+		// dispatch({ type: 'INCREASE', payload });
 	};
 
-	const addProduct = (payload) => {
-		dispatch({ type: 'ADD_ITEM', payload });
+	const decrease = async (payload, flag) => {
+		var qty = 0;
+		if (flag) qty = findQuantity(payload);
+		else qty = payload.quantity;
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/shopping_cart/',
+			headers: {
+				Authorization: `Token ${TokenService.getToken()}`,
+				'Content-Type': 'application/json'
+			},
+			data: {
+				product_id: payload.id,
+				qty: qty - 1
+			}
+		};
+
+		await Axios(config).then((response) => {
+			const res = response.data;
+			dispatch({ type: 'SET_CART', payload: res });
+		});
 	};
 
-	const removeProduct = (payload) => {
-		dispatch({ type: 'REMOVE_ITEM', payload });
+	const addProduct = async (payload) => {
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/shopping_cart/',
+			headers: {
+				Authorization: `Token ${TokenService.getToken()}`,
+				'Content-Type': 'application/json'
+			},
+			data: {
+				product_id: payload.id,
+				qty: 1
+			}
+		};
+
+		await Axios(config).then((response) => {
+			const res = response.data;
+			dispatch({ type: 'SET_CART', payload: res });
+		});
+		// dispatch({ type: 'ADD_ITEM', payload });
+	};
+
+	const removeProduct = async (payload) => {
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/shopping_cart/',
+			headers: {
+				Authorization: `Token ${TokenService.getToken()}`,
+				'Content-Type': 'application/json'
+			},
+			data: {
+				product_id: payload.id,
+				qty: 0
+			}
+		};
+
+		await Axios(config).then((response) => {
+			const res = response.data;
+			dispatch({ type: 'SET_CART', payload: res });
+		});
 	};
 
 	const clearCart = () => {
@@ -74,7 +146,7 @@ const CartState = ({ children }) => {
 		clearCart,
 		handleCheckout,
 		removeCart,
-		// setCart,
+		getCart,
 		...state
 	};
 	return <CartContext.Provider value={contextValues}>{children}</CartContext.Provider>;

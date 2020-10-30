@@ -3,6 +3,8 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import ProductContext from '../../context/product/ProductContext';
+import { SetUser } from '../../services/storage.service';
+import CartContext from '../../context/cart/CartContext';
 
 const useStyles = makeStyles((theme) => ({
 	search: {
@@ -49,11 +51,13 @@ const Search = () => {
 	const classes = useStyles();
 	const [ state, setState ] = useState(0);
 	const { value, changeValue, getProducts } = useContext(ProductContext);
+	const { getCart } = useContext(CartContext);
 
 	useEffect(
 		() => {
 			if (value === '' && state === 0) {
 				getProducts();
+				if (SetUser.getUser()) getCart();
 				setState(1);
 			}
 		},

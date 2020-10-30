@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/CartContext';
 
 const Cart = () => {
-	const { total, cartItems, itemCount, clearCart, checkout, handleCheckout } = useContext(CartContext);
+	const { total, cartItems, clearCart, checkout, handleCheckout } = useContext(CartContext);
 
 	const formatNumber = (number) => {
 		return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(number);
+	};
+
+	const findCount = () => {
+		let itemCount = cartItems.reduce((total, product) => total + product.quantity, 0);
+		console.log(itemCount);
+		return itemCount;
 	};
 	return (
 		<div className='container'>
@@ -32,7 +38,7 @@ const Cart = () => {
 					<div className='col-sm-3 p-3'>
 						<div className='card card-body'>
 							<p className='mb-1'>Total Items</p>
-							<h4 className=' mb-3 txt-right'>{itemCount}</h4>
+							<h4 className=' mb-3 txt-right'>{findCount()}</h4>
 							<p className='mb-1'>Total Payment</p>
 							<h3 className='m-0 txt-right'>{formatNumber(total)}</h3>
 							<hr className='my-4' />

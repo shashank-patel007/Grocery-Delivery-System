@@ -10,6 +10,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { SetUser } from '../../services/storage.service';
 import LoginRegister from '../loginRegister/LoginRegister';
+import { useContext } from 'react';
+import ProductContext from '../../context/product/ProductContext';
 
 const customTheme = createMuiTheme({
 	palette: {
@@ -114,6 +116,7 @@ const CustomButton = withStyles({
 
 export default function PrimarySearchAppBar() {
 	const classes = useStyles();
+	const { getProducts } = useContext(ProductContext);
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
 	const [ open, setOpen ] = useState(false);
 
@@ -141,7 +144,10 @@ export default function PrimarySearchAppBar() {
 								button
 								key='Home'
 								selected={selectedIndex === 0}
-								onClick={(event) => handleListItemClick(event, 0)}
+								onClick={(event) => {
+									handleListItemClick(event, 0);
+									getProducts();
+								}}
 							>
 								<NavLink to='/home' activeClassName={classes.link}>
 									<ListItemText style={{ textAlign: 'left', paddingLeft: '10px' }} primary='Home' />

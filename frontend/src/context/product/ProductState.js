@@ -2,7 +2,6 @@ import Axios from 'axios';
 import React, { useReducer } from 'react';
 import ProductContext from './ProductContext';
 import { ProductReducer } from './ProductReducer';
-// import { dummyProducts } from '../services/dummy';
 
 const ProductState = ({ children }) => {
 	const initialState = {
@@ -25,7 +24,6 @@ const ProductState = ({ children }) => {
 			}
 		};
 		await Axios(config).then((response) => {
-			console.log(response.data);
 			dispatch({ type: 'SET_PRODUCT', payload: response.data });
 		});
 	};

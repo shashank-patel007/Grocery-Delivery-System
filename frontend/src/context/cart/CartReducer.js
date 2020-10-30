@@ -7,7 +7,7 @@ const Storage = (cartItems) => {
 };
 
 export const sumItems = (cartItems) => {
-	Storage(cartItems);
+	// Storage(cartItems);
 	let itemCount = cartItems.reduce((total, product) => total + product.quantity, 0);
 	let total = cartItems.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2);
 	return { itemCount, total };
@@ -62,6 +62,14 @@ export const CartReducer = (state, action) => {
 		case 'REMOVE_CART':
 			return {
 				cartItems: []
+			};
+
+		case 'SET_CART':
+			return {
+				cartItems: action.payload.cartItems,
+				total: action.payload.total,
+				cartId: action.payload.cartId,
+				cartOwner: action.payload.cartOwner
 			};
 		default:
 			return state;

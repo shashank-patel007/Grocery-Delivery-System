@@ -67,7 +67,12 @@ const Product = ({ product }) => {
 
 	const findQuantity = (product) => {
 		const item = cartItems.find((item) => item.id === product.id);
+		// console.log(item);
 		return item.quantity;
+	};
+
+	const formatNumber = (number) => {
+		return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(number);
 	};
 
 	const handleExpandClick = () => {
@@ -87,7 +92,7 @@ const Product = ({ product }) => {
 							{name}
 						</Typography>
 						<Typography variant='subtitle1' color='textPrimary' align='justify' display='block'>
-							{price}
+							{formatNumber(price)}
 						</Typography>
 					</CardContent>
 				</CardActionArea>
@@ -106,6 +111,7 @@ const Product = ({ product }) => {
 								if (SetUser.getUser()) addProduct(product);
 								else setOpen(true);
 							}}
+							className={classes.expand}
 						>
 							ADD
 						</Button>
@@ -116,7 +122,7 @@ const Product = ({ product }) => {
 								color='secondary'
 								onClick={() => {
 									if (SetUser.getUser()) {
-										if (findQuantity(product) !== 1) decrease(product);
+										if (findQuantity(product) !== 1) decrease(product, true);
 										else removeProduct(product);
 									} else setOpen(true);
 								}}
@@ -139,7 +145,7 @@ const Product = ({ product }) => {
 								variant='outlined'
 								color='secondary'
 								onClick={() => {
-									if (SetUser.getUser()) increase(product);
+									if (SetUser.getUser()) increase(product, true);
 									else setOpen(true);
 								}}
 								className={classes.expand}
