@@ -15,7 +15,7 @@ class ProductListView(viewsets.ModelViewSet):
     queryset= Product.objects.all()
     serializer_class=  ProductSerializer
 
-    @action(detail=False,methods=['get','post'])
+    @action(detail=False,methods=['get'])
     def search(self,request):
         products=Product.objects.all()
 
@@ -25,11 +25,15 @@ class ProductListView(viewsets.ModelViewSet):
             pass
         except KeyError as e:
             pass   
-
+        # print(products)
+        for p in products:
+            # print(p.image)
+            p.image=r'http://127.0.0.1:8000/media/{}'.format(p.image)
+            # print(p.image)
         serializer=ProductSerializer(products,many=True)
         return Response(serializer.data,status=200)
     
-    @action(detail=False,methods=['get','post'])
+    @action(detail=False,methods=['get'])
     def category(self,request):
         products=Product.objects.all()
         try:
