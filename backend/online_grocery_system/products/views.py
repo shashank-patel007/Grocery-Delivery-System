@@ -38,6 +38,8 @@ class ProductListView(viewsets.ModelViewSet):
         products=Product.objects.all()
         try:
             products=products.filter(category=request.data['category'])
+            for p in products:
+                p.image=r'http://127.0.0.1:8000/media/{}'.format(p.image)
             serializer=ProductSerializer(products,many=True)
             return Response(serializer.data,status=200)
         except Exception as e:
