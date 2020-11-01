@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const Search = () => {
 	const classes = useStyles();
 	const [ state, setState ] = useState(0);
-	const { value, changeValue, getProducts } = useContext(ProductContext);
+	const { value, changeValue, getProducts, searchProducts } = useContext(ProductContext);
 	const { getCart } = useContext(CartContext);
 
 	useEffect(
@@ -66,7 +66,6 @@ const Search = () => {
 
 	const onChange = (e) => {
 		changeValue(e.target.value);
-		console.log('changed');
 	};
 
 	const onSearch = (e) => {
@@ -75,7 +74,7 @@ const Search = () => {
 			if (e.target.value === '') {
 				//Handle empty input
 			} else {
-				// console.log(text);
+				searchProducts();
 				changeValue('');
 			}
 		}

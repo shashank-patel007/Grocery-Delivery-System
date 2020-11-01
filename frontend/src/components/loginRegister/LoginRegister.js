@@ -7,13 +7,10 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import clsx from 'clsx';
 
-import './login-register.css';
 import Login from './Login';
 import Register from './Register';
 import AuthContext from '../../context/auth/AuthContext';
-import { useAlert } from 'react-alert';
 
 const styles = (theme) => ({
 	root: {

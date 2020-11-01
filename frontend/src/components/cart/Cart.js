@@ -12,7 +12,6 @@ const Cart = () => {
 
 	const findCount = () => {
 		let itemCount = cartItems.reduce((total, product) => total + product.quantity, 0);
-		console.log(itemCount);
 		return itemCount;
 	};
 	return (
@@ -43,10 +42,10 @@ const Cart = () => {
 							<h3 className='m-0 txt-right'>{formatNumber(total)}</h3>
 							<hr className='my-4' />
 							<div className='text-center'>
-								<button type='button' className='btn btn-primary mb-2' onClick={handleCheckout}>
+								<button type='button' className='btn btn-primary mb-2'>
 									CHECKOUT
 								</button>
-								<button type='button' className='btn btn-outlineprimary btn-sm' onClick={clearCart}>
+								<button type='button' className='btn btn-outlineprimary btn-sm'>
 									CLEAR
 								</button>
 							</div>

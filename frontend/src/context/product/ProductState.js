@@ -28,7 +28,44 @@ const ProductState = ({ children }) => {
 		});
 	};
 
-	return <ProductContext.Provider value={{ getProducts, changeValue, ...state }}>{children}</ProductContext.Provider>;
+	const searchProducts = async () => {
+		var config = {
+			method: 'post',
+			url: 'http://localhost:8000/product/search/',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			data: {
+				// category: 'Fruits'
+				name: state.value
+			}
+		};
+		await Axios(config).then((response) => {
+			dispatch({ type: 'SET_PRODUCT', payload: response.data });
+		});
+	};
+
+	const searchByCategory = async (category) => {
+		var config = {
+			method: 'post',
+			url: 'http://localhost:8000/product/category/',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			data: {
+				category
+			}
+		};
+		await Axios(config).then((response) => {
+			dispatch({ type: 'SET_PRODUCT', payload: response.data });
+		});
+	};
+
+	return (
+		<ProductContext.Provider value={{ getProducts, changeValue, searchProducts, searchByCategory, ...state }}>
+			{children}
+		</ProductContext.Provider>
+	);
 };
 
 export default ProductState;

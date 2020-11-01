@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import ProductContext from '../../context/product/ProductContext';
 
 const useStyles = makeStyles({
@@ -18,10 +17,10 @@ const useStyles = makeStyles({
 
 const Category = ({ name, image }) => {
 	const classes = useStyles();
-	const { filterProductsByCategory } = useContext(ProductContext);
+	const { searchByCategory } = useContext(ProductContext);
 	return (
 		<div className='col-2'>
-			<div className={`card ${classes.category}`}>
+			<div className={`card ${classes.category}`} onClick={() => searchByCategory(name)}>
 				<img
 					src={image}
 					alt={name}

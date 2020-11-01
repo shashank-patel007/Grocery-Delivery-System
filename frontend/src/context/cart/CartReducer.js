@@ -68,7 +68,7 @@ export const CartReducer = (state, action) => {
 			return {
 				cartItems: action.payload.cartItems,
 				total: action.payload.total,
-				cartId: action.payload.cartId,
+				cartID: action.payload.cartID,
 				cartOwner: action.payload.cartOwner
 			};
 		default:
