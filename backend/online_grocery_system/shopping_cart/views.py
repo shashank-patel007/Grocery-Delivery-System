@@ -25,13 +25,49 @@ class CartView(APIView):
     permission_classes=(IsAuthenticated,)
 
     def get(self,request):
-        return self.update_cart(request)
+        return self.updateQuantity(request)
 
     def post(self,request):
-       return self.update_cart(request)
+       return self.updateQuantity(request)
+    
+    def calcTotalPrice(self,cart):
+        new_total = 0.00
+
+        for item in cart.cartitem_set.all():
+            line_total = float(item.product.price) * item.quantity
+            item.subTotal = line_total
+            # print(item.subTotal)
+            item.save()
+            new_total += line_total
+
+        cart.total = new_total
+        # print(cart.total)
+        cart.save()
+
+    def deleteCartItem(self,product,cart_item):
+        # print("Function called")
+        product.available_quantity += cart_item.quantity
+        cart_item.delete()
+        product.save()
+
+        return product,cart_item
+    
+    def addCartItem(self,product,cart_item,present_qty,new_qty):
+        # print("Function called")
+        change_in_quantity = new_qty - present_qty
+        if product.available_quantity - change_in_quantity >= 0:
+            product.available_quantity -= change_in_quantity
+            cart_item.quantity = new_qty
+            cart_item.save()
+            product.save()
+        else:
+            print("Maximum available quantity is {0}".format(
+                product.available_quantity))
+
+        return product,cart_item
 
     # @api_view(['POST', 'GET'])
-    def update_cart(self,request):
+    def updateQuantity(self,request):
 
         # code outside of the if block is common to both GET and POST methods, hence there is no explicit
         # if statement to check if the method is a GET method
@@ -51,32 +87,38 @@ class CartView(APIView):
                 cart=cart, product=product)
 
             if(request.data['qty'] == 0):
-                product.available_quantity += cart_item.quantity
-                cart_item.delete()
-                product.save()
+                # product.available_quantity += cart_item.quantity
+                # cart_item.delete()
+                # product.save()
+                product,cart_item=self.deleteCartItem(product,cart_item)
             else:
                 present_qty = cart_item.quantity
                 new_qty = request.data['qty']
-                change_in_quantity = new_qty - present_qty
-                if product.available_quantity - change_in_quantity >= 0:
-                    product.available_quantity -= change_in_quantity
-                    cart_item.quantity = new_qty
-                    cart_item.save()
-                    product.save()
+
+                if present_qty==0:
+                    product,cart_item=self.addCartItem(product,cart_item,present_qty,new_qty)
                 else:
-                    print("Maximum available quantity is {0}".format(
-                        product.available_quantity))
+                    change_in_quantity = new_qty - present_qty
+                    if product.available_quantity - change_in_quantity >= 0:
+                        product.available_quantity -= change_in_quantity
+                        cart_item.quantity = new_qty
+                        cart_item.save()
+                        product.save()
+                    else:
+                        print("Maximum available quantity is {0}".format(
+                            product.available_quantity))
+                            
+            self.calcTotalPrice(cart)
+            # new_total = 0.00
 
-            new_total = 0.00
+            # for item in cart.cartitem_set.all():
+            #     line_total = float(item.product.price) * item.quantity
+            #     item.subTotal = line_total
+            #     item.save()
+            #     new_total += line_total
 
-            for item in cart.cartitem_set.all():
-                line_total = float(item.product.price) * item.quantity
-                item.subTotal = line_total
-                item.save()
-                new_total += line_total
-
-            cart.total = new_total
-            cart.save()
+            # cart.total = new_total
+            # cart.save()
 
         # if block ends
 
