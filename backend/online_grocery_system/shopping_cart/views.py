@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.core.mail import send_mail
 
 from .serializers import CartItemSerializer, CartSerializer
 
-from .models import Cart, CartItem
+from .models import Cart, CartItem, Orders, OrderDetails
 from products.models import Product
 
 from django.contrib.auth.models import User
@@ -16,6 +17,11 @@ from rest_framework.permissions import IsAuthenticated
 
 from accounts.models import Users
 import logging
+
+from datetime import date
+import smtplib
+from online_grocery_system import settings
+from prettytable import PrettyTable
 
 logger = logging.getLogger(__name__)
 
@@ -146,3 +152,52 @@ class CartView(APIView):
         }
 
         return Response(response, status=200)
+
+
+class OrdersView(APIView):
+    authentication_classes=(TokenAuthentication,)
+    permission_classes=(IsAuthenticated,)
+
+    def post(self,request):
+        user=request.user
+        order=Orders(customer_name=user.name,customer_id=user.id,date_created=date.today())
+        cart=Cart.objects.get(id=request.data['cart_id'])
+        cart_item_object=CartItem.objects.filter(cart=cart)
+        quantity=''
+        product_name=''
+        for item in cart_item_object:
+            quantity+=str(item.quantity)+','
+            product_name+=str(item.product.name)+','
+        quantity=quantity[:-1]
+        product_name=product_name[:-1]
+        order_details=OrderDetails(product_name=product_name,quantity=quantity,sub_total=cart.total)
+        order.save()
+        order_details.save()
+        total=cart.total
+        cart.delete()
+        self.send_mail_confirmation(to_email=user.email,product_name=product_name,quantity=quantity,total=cart.total)
+        return Response({"name":user.name,
+                            'product_name':product_name,
+                            'quantity':quantity,
+                            'total':total})
+
+    def send_mail_confirmation(self,to_email,quantity,product_name,total):
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        SUBJECT='Grocers Order Confirmation'
+        quantity_list=quantity.split(',')
+        product_list=product_name.split(',')
+        x=PrettyTable(['Products','Quantity'])
+        x.align['Products']='l'
+        x.align['Quantity']='r'
+        x.padding_width=5
+        
+        for i in range(len(product_list)):
+            x.add_row([product_list[i],quantity_list[i]])
+        
+        TEXT=x.get_string(border=False)
+        message='Subject: {}\n\nThank you for ordering with us.\n\n{}\n\nYour Grand Total is: {}'.format(SUBJECT, TEXT, total)
+        server.sendmail(settings.EMAIL_HOST_USER, to_email, message)
+        
+        

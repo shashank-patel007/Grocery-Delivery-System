@@ -28,4 +28,4 @@ class Product(models.Model):
     available_quantity = models.IntegerField()
 
     def __str__(self):
-        return self.name
+        return self.name   
