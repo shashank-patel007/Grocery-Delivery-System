@@ -28,3 +28,27 @@ class Cart(models.Model):
 
     def __str__(self):
         return ("User-" + str(self.user.id) + ",Cart id-" + str(self.id))
+
+class Orders(models.Model):
+    date_created=models.DateField()
+    customer_name=models.CharField(max_length=20)
+    customer_id=models.IntegerField()
+    status=models.CharField(max_length=20,default='Paid')
+
+    def __str__(self):
+        return str(self.customer_name)
+
+    class Meta:
+        verbose_name_plural = "Orders"
+    
+
+class OrderDetails(models.Model):
+    product_name=models.CharField(max_length=255,default='')
+    quantity=models.CharField(max_length=255,default='')
+    sub_total=models.FloatField()
+
+    def __str__(self):
+        return str(product_name)
+    class Meta:
+        verbose_name_plural="Order Details"
+ 

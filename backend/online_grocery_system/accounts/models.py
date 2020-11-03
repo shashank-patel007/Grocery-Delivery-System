@@ -35,6 +35,8 @@ class Users(AbstractBaseUser,PermissionsMixin):
     address=models.CharField(max_length=255,default='NA')
 
     objects=UsersManager()
+    class Meta:
+        verbose_name_plural = "Users"
 
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['name','mobile_no']
