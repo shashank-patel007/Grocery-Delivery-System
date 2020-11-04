@@ -21,7 +21,17 @@ const Cart = () => {
 					{cartItems.length > 0 ? (
 						<CartProducts />
 					) : (
-						<div className='p-3 text-center text-muted'>Your cart is empty</div>
+						<div
+							className='text-center'
+							style={{
+								color: '#000',
+								fontWeight: 'bolder',
+								fontSize: '1.6rem',
+								fontFamily: 'Courgette,cursive'
+							}}
+						>
+							Your cart is empty
+						</div>
 					)}
 				</div>
 				{cartItems.length > 0 && (
@@ -34,7 +44,11 @@ const Cart = () => {
 							<hr className='my-4' />
 							<div className='text-center'>
 								<Link to='/checkout'>
-									<button type='button' className='btn btn-primary mb-2'>
+									<button
+										type='button'
+										className='btn mb-2'
+										style={{ backgroundColor: '#A71D31', color: '#fff' }}
+									>
 										CHECKOUT
 									</button>
 								</Link>

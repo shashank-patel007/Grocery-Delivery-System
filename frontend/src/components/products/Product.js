@@ -2,7 +2,6 @@ import React, { Fragment, useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,8 +15,8 @@ import LoginRegister from '../loginRegister/LoginRegister';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		maxWidth: 300,
-		height: 'auto',
+		// maxWidth: 300,
+		// height: 'auto',
 		filter: 'drop-shadow(0px 6px 6px rgba(0, 0, 0, 0.25))',
 		borderRadius: '20px'
 	},
@@ -28,24 +27,27 @@ const useStyles = makeStyles((theme) => ({
 		}
 	},
 	media: {
-		// padding: '20px 0',
-		height: '106',
-		width: '100'
+		height: '170px',
+		width: '170px',
+		margin: 'auto',
+		display: 'block'
 	},
 	defaultButton: {
-		backgroundColor: '#f50057',
+		background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 		fontSize: '1.2rem',
 		color: '#fff',
 		padding: '6px',
+		borderRadius: '20px',
+		margin: '10px',
 
 		'&:hover': {
-			backgroundColor: '#f50057',
+			background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 			color: '#fff',
 			outline: 'none',
 			border: 'none'
 		},
 		'&:focus': {
-			backgroundColor: '#f50057',
+			background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 			color: '#fff',
 			outline: 'none',
 			border: 'none'
@@ -60,7 +62,7 @@ const Product = ({ product }) => {
 	const classes = useStyles();
 	const [ expanded, setExpanded ] = useState(false);
 	const [ open, setOpen ] = useState(false);
-	const { key, name, price, description, stock, image } = product;
+	const { name, price, description, stock, image } = product;
 	const { cartItems, addProduct, removeProduct, increase, decrease } = useContext(CartContext);
 
 	const isInCart = (product) => {
@@ -69,7 +71,6 @@ const Product = ({ product }) => {
 
 	const findQuantity = (product) => {
 		const item = cartItems.find((item) => item.id === product.id);
-		// console.log(item);
 		return item.quantity;
 	};
 
@@ -85,7 +86,7 @@ const Product = ({ product }) => {
 		<Fragment>
 			<Card className={classes.root} raised>
 				<CardActionArea onClick={handleExpandClick}>
-					<CardMedia className={classes.media} component='img' image={image} alt={name} />
+					<img src={image} alt={name} className={classes.media} />
 					<CardContent className={classes.content}>
 						<Typography variant='subtitle1' color='textSecondary' align='center'>
 							{stock && 'Avaliable in Stock'}
@@ -93,7 +94,13 @@ const Product = ({ product }) => {
 						<Typography variant='h6' color='textSecondary' align='center'>
 							{name}
 						</Typography>
-						<Typography variant='subtitle1' color='textPrimary' align='justify' display='block'>
+						<Typography
+							variant='subtitle1'
+							color='textPrimary'
+							align='justify'
+							display='block'
+							style={{ marginLeft: '15px' }}
+						>
 							{formatNumber(price)}
 						</Typography>
 					</CardContent>

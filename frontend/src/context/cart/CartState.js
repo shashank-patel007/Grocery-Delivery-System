@@ -94,7 +94,6 @@ const CartState = ({ children }) => {
 			const res = response.data;
 			dispatch({ type: 'SET_CART', payload: res });
 		});
-		// dispatch({ type: 'ADD_ITEM', payload });
 	};
 
 	const removeProduct = async (payload) => {
@@ -117,27 +116,11 @@ const CartState = ({ children }) => {
 		});
 	};
 
-	const clearCart = () => {
-		dispatch({ type: 'CLEAR' });
-	};
-
-	const removeCart = () => {
-		dispatch({ type: 'REMOVE_CART' });
-	};
-
-	const handleCheckout = () => {
-		console.log('CHECKOUT', state);
-		dispatch({ type: 'CHECKOUT' });
-	};
-
 	const contextValues = {
 		removeProduct,
 		addProduct,
 		increase,
 		decrease,
-		clearCart,
-		handleCheckout,
-		removeCart,
 		getCart,
 		...state
 	};

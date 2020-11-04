@@ -43,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 	title: {
 		display: 'none',
+		color: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
+		background: '-webkit-linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
+		WebkitBackgroundClip: 'text',
+		WebkitTextFillColor: 'transparent',
+		fontFamily: 'Courgette,cursive',
 		[theme.breakpoints.up('sm')]: {
 			display: 'block'
 		}

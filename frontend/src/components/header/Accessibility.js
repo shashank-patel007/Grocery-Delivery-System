@@ -9,8 +9,8 @@ import clsx from 'clsx';
 import LoginRegister from '../loginRegister/LoginRegister';
 import { SetUser } from '../../services/storage.service';
 import { Button } from '@material-ui/core';
-import CartContext from '../../context/cart/CartContext';
 import { useHistory } from 'react-router-dom';
+import OrderContext from '../../context/order/OrderContext';
 const useStyles = makeStyles((theme) => ({
 	button: {
 		fontSize: '1em',
@@ -55,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Accessibility = () => {
 	const classes = useStyles();
-	const { removeCart } = useContext(CartContext);
 	const [ open, setOpen ] = useState(false);
+	const [ anchorEl, setAnchorEl ] = useState(null);
+	const { getOrders, emptyOrderList } = useContext(OrderContext);
 	const history = useHistory();
-	const [ anchorEl, setAnchorEl ] = React.useState(null);
 
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -70,7 +70,7 @@ const Accessibility = () => {
 
 	const logout = () => {
 		SetUser.removeUser();
-		removeCart();
+		emptyOrderList();
 		history.push('/home');
 		setAnchorEl(null);
 	};
@@ -103,8 +103,15 @@ const Accessibility = () => {
 						open={Boolean(anchorEl)}
 						onClose={handleClose}
 					>
-						<MenuItem onClick={handleClose}>Profile</MenuItem>
-						<MenuItem onClick={handleClose}>My account</MenuItem>
+						<MenuItem
+							onClick={() => {
+								getOrders();
+								setAnchorEl(null);
+								history.push('/myorders');
+							}}
+						>
+							My orders
+						</MenuItem>
 						<MenuItem onClick={logout}>Logout</MenuItem>
 					</Menu>
 				</div>

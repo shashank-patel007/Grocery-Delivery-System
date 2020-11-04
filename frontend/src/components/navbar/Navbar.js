@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { NavLink, useHistory } from 'react-router-dom';
@@ -13,6 +14,7 @@ import LoginRegister from '../loginRegister/LoginRegister';
 import { useContext } from 'react';
 import ProductContext from '../../context/product/ProductContext';
 import ContactUs from '../contact/ContactUs';
+import CartContext from '../../context/cart/CartContext';
 
 const customTheme = createMuiTheme({
 	palette: {
@@ -94,30 +96,42 @@ const CustomButton = withStyles({
 		border: 'none',
 		outline: 'none',
 		textTransform: 'none',
-		backgroundColor: '#f55d2c',
+		borderRadius: '30px',
+		background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 		'&:hover': {
 			boxShadow: 'none',
 			border: 'none',
-			backgroundColor: '#f55d2c',
+			background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 			outline: 'none'
 		},
 		'&:active': {
 			boxShadow: 'none',
 			border: 'none',
-			backgroundColor: '#f55d2c',
+			background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 			outline: 'none'
 		},
 		'&:focus': {
 			border: 'none',
-			backgroundColor: '#f55d2c',
+			background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 			outline: 'none'
 		}
 	}
 })(Button);
 
+const StyledBadge = withStyles((theme) => ({
+	badge: {
+		border: `2px solid ${theme.palette.background.paper}`,
+		padding: '0 4px',
+		// fontSize: '1em',
+		fontWeight: 'bolder'
+		// marginLeft: '6px'
+	}
+}))(Badge);
+
 const Navbar = () => {
 	const classes = useStyles();
 	const { getProducts } = useContext(ProductContext);
+	const { cartItems } = useContext(CartContext);
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
 	const [ open, setOpen ] = useState({ login: false, contactUs: false });
 
@@ -193,9 +207,13 @@ const Navbar = () => {
 						<div className={classes.grow} />
 						<CustomButton
 							onClick={handleClick}
-							startIcon={<ShoppingCartIcon style={{ fontSize: '1em' }} />}
+							startIcon={
+								<StyledBadge badgeContent={cartItems.length}>
+									<ShoppingCartIcon style={{ marginRight: '5px' }} />
+								</StyledBadge>
+							}
 						>
-							Cart
+							<span style={{ marginLeft: '10px' }}>Cart</span>
 						</CustomButton>
 					</Toolbar>
 				</AppBar>

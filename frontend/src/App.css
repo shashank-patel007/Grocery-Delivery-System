@@ -1,5 +1,10 @@
 body {
 	background-color: #f7f7f7;
+	background-image: url("./assets/background.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
 }
 
 a {

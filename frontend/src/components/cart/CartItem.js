@@ -57,11 +57,11 @@ const CartItem = ({ product }) => {
 				{product.quantity > 1 && (
 					<IconButton
 						variant='outlined'
-						color='secondary'
 						onClick={() => decrease(product, false)}
 						className={classes.expand}
 						style={{
-							marginRight: '0.5rem'
+							marginRight: '0.5rem',
+							background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)'
 						}}
 					>
 						<RemoveIcon />
@@ -71,11 +71,11 @@ const CartItem = ({ product }) => {
 				{product.quantity === 1 && (
 					<IconButton
 						variant='outlined'
-						color='secondary'
 						onClick={() => removeProduct(product)}
 						className={classes.expand}
 						style={{
-							marginRight: '0.5rem'
+							marginRight: '0.5rem',
+							background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)'
 						}}
 					>
 						<DeleteIcon />
@@ -84,15 +84,14 @@ const CartItem = ({ product }) => {
 
 				<IconButton
 					variant='outlined'
-					color='secondary'
 					onClick={() => {
 						console.log(product);
 						increase(product, false);
 					}}
 					className={classes.expand}
-					// style={{
-					// 	marginRight: '0.5rem'
-					// }}
+					style={{
+						background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)'
+					}}
 				>
 					<AddIcon />
 				</IconButton>

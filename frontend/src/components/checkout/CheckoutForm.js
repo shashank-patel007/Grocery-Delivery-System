@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import CartContext from '../../context/cart/CartContext';
 import PersonIcon from '@material-ui/icons/Person';
@@ -12,16 +12,20 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import CardPayment from './CardPayment';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Gif from '../../assets/successful.gif';
+import Gif from '../../assets/success2.gif';
 import { useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
+import OrderContext from '../../context/order/OrderContext';
 
 const useStyles = makeStyles((theme) => ({
 	textfield: {
 		margin: '30px 0 0',
-		backgroundColor: '#fff'
+		backgroundColor: '#fff',
+		borderRadius: '10px'
 	},
 	defaultButton: {
+		background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
+		borderRadius: '24px',
 		margin: '15px 0',
 		'&:hover': {
 			boxShadow: 'none',
@@ -43,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#0DA59C'
+			main: '#008080'
 		}
 	}
 });
@@ -61,36 +65,29 @@ const CheckoutForm = () => {
 		name: SetUser.getUser().name,
 		email: SetUser.getUser().email,
 		mobile_no: SetUser.getUser().mobile_no,
-		address: SetUser.getUser().address === 'NA' ? '' : SetUser.getUser.address,
+		address: SetUser.getUser().address === 'NA' ? '' : SetUser.getUser().address,
 		payment: ''
 	});
 	const [ success, setSuccess ] = useState(false);
 	const alert = useAlert();
-	const { total, cartItems } = useContext(CartContext);
+	const { total, cartItems, cartID, getCart } = useContext(CartContext);
+	const { confirmOrder } = useContext(OrderContext);
+	const history = useHistory();
 
 	const handleInputChange = (prop) => (event) => {
 		setValue({ ...value, [prop]: event.target.value });
 	};
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		setSuccess(true);
+		await confirmOrder(cartID);
+		setSuccess(false);
+		getCart();
+		history.push('/home');
 		alert.success('Order Placed Successfully.');
 	};
 
 	const classes = useStyles();
-	const history = useHistory();
-	useEffect(
-		() => {
-			var timer;
-			if (success) {
-				timer = setTimeout(() => {
-					setSuccess(false);
-					history.push('/home');
-				}, 3000);
-			}
-			return () => clearTimeout(timer);
-		},
-		[ success, history ]
-	);
+
 	return (
 		<Fragment>
 			<div className='container' style={{ padding: '0 200px', display: success ? 'none' : 'block' }}>
@@ -190,9 +187,8 @@ const CheckoutForm = () => {
 										validators={[ 'required' ]}
 										errorMessages={[ 'this field is required' ]}
 										onChange={handleInputChange('payment')}
-										helperText='Select Your Payment method'
 									>
-										<MenuItem value={'Cash on Delivery'}>Cash On Dilevery</MenuItem>
+										<MenuItem value={'Cash on Delivery'}>Cash On Delivery</MenuItem>
 										<MenuItem value={'Debit/Credit Card'}>Debit/Credit Card</MenuItem>
 									</TextValidator>
 									{value.payment === 'Debit/Credit Card' && <CardPayment />}
@@ -218,10 +214,31 @@ const CheckoutForm = () => {
 						</div>
 					</div>
 				)}
-				{cartItems.length === 0 && <div className='p-3 text-center text-muted'>Your cart is empty</div>}
+				{cartItems.length === 0 && (
+					<div
+						className='p-3 text-center'
+						style={{
+							color: '#000',
+							fontWeight: 'bolder',
+							fontSize: '1.6rem',
+							fontFamily: 'Courgette,cursive'
+						}}
+					>
+						Your cart is empty
+					</div>
+				)}
 			</div>
 			<div className='container' style={{ padding: '0 200px', display: !success ? 'none' : 'block' }}>
-				<img src={Gif} alt='succes' style={{ display: 'block', margin: '20px auto' }} />
+				<img
+					src={Gif}
+					alt='succes'
+					style={{
+						height: '100px',
+						width: '100px',
+						display: 'block',
+						margin: '180px auto 0'
+					}}
+				/>
 			</div>
 		</Fragment>
 	);

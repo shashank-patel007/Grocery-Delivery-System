@@ -63,7 +63,7 @@ const DialogContent = withStyles((theme) => ({
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#0DA59C'
+			main: '#000'
 		}
 	}
 });

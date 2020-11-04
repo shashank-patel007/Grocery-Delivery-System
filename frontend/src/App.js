@@ -13,41 +13,53 @@ import { SetUser } from './services/storage.service';
 import ProductState from './context/product/ProductState';
 import CategoryList from './components/categories/CategoryList';
 import CheckoutForm from './components/checkout/CheckoutForm';
+import OrderState from './context/order/OrderState';
+import OrderList from './components/orders/OrderList';
 
 function App() {
 	return (
 		<AuthState>
 			<ProductState>
 				<CartState>
-					<Router>
-						<div className='App'>
-							<Header />
-							<Navbar />
-							<Switch>
-								{SetUser.getUser() ? (
-									<Route excat path='/cart' component={Cart} />
-								) : (
-									<Route exact path='/cart'>
+					<OrderState>
+						<Router>
+							<div className='App'>
+								<Header />
+								<Navbar />
+
+								<Switch>
+									{SetUser.getUser() ? (
+										<Route excat path='/cart' component={Cart} />
+									) : (
+										<Route exact path='/cart'>
+											<Redirect to='/home' />
+										</Route>
+									)}
+									{SetUser.getUser() ? (
+										<Route excat path='/checkout' component={CheckoutForm} />
+									) : (
+										<Route exact path='/checkout'>
+											<Redirect to='/home' />
+										</Route>
+									)}
+									{SetUser.getUser() ? (
+										<Route excat path='/myorders' component={OrderList} />
+									) : (
+										<Route exact path='/myorders'>
+											<Redirect to='/home' />
+										</Route>
+									)}
+									<Route excat path='/home'>
+										<CategoryList />
+										<ProductList />
+									</Route>
+									<Route exact path='/'>
 										<Redirect to='/home' />
 									</Route>
-								)}
-								{SetUser.getUser() ? (
-									<Route excat path='/checkout' component={CheckoutForm} />
-								) : (
-									<Route exact path='/checkout'>
-										<Redirect to='/home' />
-									</Route>
-								)}
-								<Route excat path='/home'>
-									<CategoryList />
-									<ProductList />
-								</Route>
-								<Route exact path='/'>
-									<Redirect to='/home' />
-								</Route>
-							</Switch>
-						</div>
-					</Router>
+								</Switch>
+							</div>
+						</Router>
+					</OrderState>
 				</CartState>
 			</ProductState>
 		</AuthState>

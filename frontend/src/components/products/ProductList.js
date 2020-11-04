@@ -131,9 +131,9 @@ const ProductList = () => {
 
 const userStyle = {
 	display: 'grid',
-	gridTemplateColumns: 'repeat(5,1fr)',
+	gridTemplateColumns: 'repeat(4,1fr)',
 	gridGap: '3rem',
-	marginTop: '30px'
+	margin: '30px auto 60px'
 	//   color: '#0000FF',
 };
 

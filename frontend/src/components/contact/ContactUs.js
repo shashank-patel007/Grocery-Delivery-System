@@ -66,7 +66,7 @@ const DialogContent = withStyles((theme) => ({
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			main: '#0DA59C'
+			main: '#008080'
 		}
 	}
 });
@@ -80,6 +80,8 @@ const useStyles = makeStyles({
 		outline: 'none'
 	},
 	defaultButton: {
+		borderRadius: '24px',
+		background: 'linear-gradient(315deg, #FE5858 0%, #EE9617 74%)',
 		'&:hover': {
 			boxShadow: 'none',
 			border: 'none',
@@ -106,7 +108,7 @@ const ContactUs = ({ handleClose, open }) => {
 	const classes = useStyles();
 
 	const onChange = (e) => {
-		setValue({ [e.target.name]: e.target.value });
+		setValue({ ...value, [e.target.name]: e.target.value });
 		// console.log(e.target.value);
 	};
 
@@ -118,6 +120,7 @@ const ContactUs = ({ handleClose, open }) => {
 			email: '',
 			message: ''
 		});
+		handleClose();
 	};
 	return (
 		<Dialog
