@@ -170,7 +170,7 @@ class OrdersView(APIView):
             product_name+=str(item.product.name)+','
         quantity=quantity[:-1]
         product_name=product_name[:-1]
-        order_details=OrderDetails(product_name=product_name,quantity=quantity,sub_total=cart.total)
+        order_details=OrderDetails(product_name=product_name,quantity=quantity,sub_total=cart.total,customer_id=user.id)
         order.save()
         order_details.save()
         total=cart.total
@@ -200,4 +200,16 @@ class OrdersView(APIView):
         message='Subject: {}\n\nThank you for ordering with us.\n\n{}\n\nYour Grand Total is: {}'.format(SUBJECT, TEXT, total)
         server.sendmail(settings.EMAIL_HOST_USER, to_email, message)
         
-        
+    def get(self,request):
+        user=request.user
+        orders=Orders.objects.filter(customer_id=user.id)
+        order_details=OrderDetails.objects.filter(customer_id=user.id)
+        details=[]
+        count=1
+        for order_detail in order_details:
+            details.append({"product_name":order_detail.product_name,
+                                          "quantity":order_detail.quantity,
+                                          "total":order_detail.sub_total,
+                                          "date_created":orders[count-1].date_created})
+            count+=1
+        return Response(details)
