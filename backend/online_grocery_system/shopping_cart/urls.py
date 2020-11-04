@@ -3,5 +3,6 @@ from shopping_cart.views import  CartView, OrdersView
 
 urlpatterns = [
     path('', CartView.as_view()),
-    path('order',OrdersView.as_view())
+    path('order',OrdersView.as_view()),
+    path('contactus',ContactUsView.as_view())
 ]

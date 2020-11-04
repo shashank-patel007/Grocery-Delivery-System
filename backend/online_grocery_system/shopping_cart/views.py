@@ -213,3 +213,23 @@ class OrdersView(APIView):
                                           "date_created":orders[count-1].date_created})
             count+=1
         return Response(details)
+
+class ContactUsView(APIView):
+    authentication_classes=()
+    permission_classes=()
+
+    def post(self,request):
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+
+        name=request.data["name"]
+        email=request.data["email"]
+        content=request.data["message"]
+        SUBJECT="New Message from {}".format(email)
+        TEXT="Customer Name- {}\n\nCustomer Email- {}\n\nReceived message-\n{}".format(name,email,content)
+        message='Subject: {}\n\n{}'.format(SUBJECT,TEXT)
+        
+        server.sendmail(settings.EMAIL_HOST_USER,['ruchanargunde@gmail.com'],message)
+        
+        return Response({"response":"Your message has been sent."})
