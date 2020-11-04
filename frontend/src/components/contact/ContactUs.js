@@ -13,6 +13,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Axios from 'axios';
 
 const styles = (theme) => ({
 	root: {
@@ -114,6 +115,21 @@ const ContactUs = ({ handleClose, open }) => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		var config = {
+			method: 'post',
+			url: 'http://127.0.0.1:8000/shopping_cart/contactus',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			data: { name: value.name, email: value.email, message: value.message }
+		};
+		await Axios(config)
+			.then(function(response) {
+				console.log(response.data);
+			})
+			.catch(function(error) {
+				console.log(error);
+			});
 		alert('Your message has been sent.We will get back shortly');
 		setValue({
 			name: '',
