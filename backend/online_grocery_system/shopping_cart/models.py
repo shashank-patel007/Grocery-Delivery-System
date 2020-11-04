@@ -46,9 +46,9 @@ class OrderDetails(models.Model):
     product_name=models.CharField(max_length=255,default='')
     quantity=models.CharField(max_length=255,default='')
     sub_total=models.FloatField()
-
+    customer_id=models.IntegerField()
     def __str__(self):
-        return str(product_name)
+        return str(self.product_name)
     class Meta:
         verbose_name_plural="Order Details"
  
