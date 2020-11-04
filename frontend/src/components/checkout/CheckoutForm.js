@@ -61,7 +61,7 @@ const CheckoutForm = () => {
 		name: SetUser.getUser().name,
 		email: SetUser.getUser().email,
 		mobile_no: SetUser.getUser().mobile_no,
-		address: SetUser.getUser().address,
+		address: SetUser.getUser().address === 'NA' ? '' : SetUser.getUser.address,
 		payment: ''
 	});
 	const [ success, setSuccess ] = useState(false);
