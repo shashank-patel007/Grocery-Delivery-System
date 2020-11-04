@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from 'react';
+import React, { Fragment, useState } from 'react';
 import { fade, withStyles, makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
@@ -10,7 +10,6 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Login from './Login';
 import Register from './Register';
-import AuthContext from '../../context/auth/AuthContext';
 
 const styles = (theme) => ({
 	root: {
@@ -117,7 +116,6 @@ const LoginRegister = ({ handleClose, open }) => {
 
 	const [ isLogin, setIsLogin ] = useState(true);
 
-	const authContext = useContext(AuthContext);
 	//**These functions handles login and register form */
 	const setToRegister = () => {
 		setIsLogin(false);

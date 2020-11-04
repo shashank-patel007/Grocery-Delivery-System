@@ -1,13 +1,4 @@
-import { SetUser } from '../../services/storage.service';
-
-const Storage = (cartItems) => {
-	if (SetUser.getUser()) {
-		localStorage.setItem(`CART-${SetUser.getUser().name}`, JSON.stringify(cartItems.length > 0 ? cartItems : []));
-	}
-};
-
 export const sumItems = (cartItems) => {
-	// Storage(cartItems);
 	let itemCount = cartItems.reduce((total, product) => total + product.quantity, 0);
 	let total = cartItems.reduce((total, product) => total + product.price * product.quantity, 0).toFixed(2);
 	return { itemCount, total };

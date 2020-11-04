@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/CartContext';
 
 const Cart = () => {
-	const { total, cartItems, clearCart, checkout, handleCheckout } = useContext(CartContext);
+	const { total, cartItems } = useContext(CartContext);
 
 	const formatNumber = (number) => {
 		return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(number);
@@ -15,22 +15,13 @@ const Cart = () => {
 		return itemCount;
 	};
 	return (
-		<div className='container'>
+		<div className='container-md'>
 			<div className='row no-gutters justify-content-center'>
 				<div className='col-sm-9 p-3'>
 					{cartItems.length > 0 ? (
 						<CartProducts />
 					) : (
 						<div className='p-3 text-center text-muted'>Your cart is empty</div>
-					)}
-
-					{checkout && (
-						<div className='p-3 text-center text-success'>
-							<p>Checkout successfull</p>
-							<Link to='/' className='btn btn-outline-success btn-sm'>
-								BUY MORE
-							</Link>
-						</div>
 					)}
 				</div>
 				{cartItems.length > 0 && (
@@ -42,12 +33,11 @@ const Cart = () => {
 							<h3 className='m-0 txt-right'>{formatNumber(total)}</h3>
 							<hr className='my-4' />
 							<div className='text-center'>
-								<button type='button' className='btn btn-primary mb-2'>
-									CHECKOUT
-								</button>
-								<button type='button' className='btn btn-outlineprimary btn-sm'>
-									CLEAR
-								</button>
+								<Link to='/checkout'>
+									<button type='button' className='btn btn-primary mb-2'>
+										CHECKOUT
+									</button>
+								</Link>
 							</div>
 						</div>
 					</div>

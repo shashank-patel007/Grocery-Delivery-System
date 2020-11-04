@@ -1,18 +1,10 @@
 import React, { useReducer } from 'react';
-
-import { CartReducer, sumItems } from './CartReducer';
+import { CartReducer } from './CartReducer';
 import CartContext from './CartContext';
-import { SetUser, TokenService } from '../../services/storage.service';
+import { TokenService } from '../../services/storage.service';
 import Axios from 'axios';
 
 const CartState = ({ children }) => {
-	// var storage = [];
-	// if (SetUser.getUser()) {
-	// 	storage = localStorage.getItem(`CART-${SetUser.getUser().name}`)
-	// 		? JSON.parse(localStorage.getItem(`CART-${SetUser.getUser().name}`))
-	// 		: [];
-	// }
-	// const initialState = { cartItems: storage, ...sumItems(storage), checkout: false };
 	const initialState = { cartItems: [], total: 0, cartId: '', cartOwner: '' };
 	const [ state, dispatch ] = useReducer(CartReducer, initialState);
 

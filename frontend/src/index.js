@@ -5,20 +5,25 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 const options = {
 	// you can also just use 'bottom center'
 	position: positions.TOP_CENTER,
-	timeout: 5000,
+	timeout: 3000,
 	offset: '30px',
 	// you can also just use 'scale'
 	transition: transitions.SCALE
 };
+const stripePromise = loadStripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
 
 ReactDOM.render(
 	<React.StrictMode>
 		<AlertProvider template={AlertTemplate} {...options}>
-			<App />
+			<Elements stripe={stripePromise}>
+				<App />
+			</Elements>
 		</AlertProvider>
 	</React.StrictMode>,
 	document.getElementById('root')

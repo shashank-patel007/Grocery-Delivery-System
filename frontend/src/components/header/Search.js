@@ -61,7 +61,7 @@ const Search = () => {
 				setState(1);
 			}
 		},
-		[ value, getProducts, state ]
+		[ value, getProducts, state, getCart ]
 	);
 
 	const onChange = (e) => {

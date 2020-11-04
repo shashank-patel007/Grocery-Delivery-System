@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import AuthContext from '../../context/auth/AuthContext';
 import CartContext from '../../context/cart/CartContext';
-import { useEffect } from 'react';
 import { useAlert } from 'react-alert';
 
 const useStyles = makeStyles({
@@ -75,11 +74,11 @@ const Login = (props) => {
 	async function handleSubmit() {
 		let res = await authContext.login(loginState);
 		console.log(res);
-		// setResult({ success: res.success });
 		if (res.success) {
 			props.handleClose();
 			getCart();
 			alert.success('Logged in Succesfully..');
+			window.location.reload();
 		} else if (res.error.non_field_errors) {
 			setLoginState({ ...loginState, password: '' });
 			setResult({ success: false, errorMessage: 'Entered credentials dont match!' });

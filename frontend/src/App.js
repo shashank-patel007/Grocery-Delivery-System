@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Header from './components/header/Header';
 import Navbar from './components/navbar/Navbar';
@@ -12,6 +12,7 @@ import Cart from './components/cart/Cart';
 import { SetUser } from './services/storage.service';
 import ProductState from './context/product/ProductState';
 import CategoryList from './components/categories/CategoryList';
+import CheckoutForm from './components/checkout/CheckoutForm';
 
 function App() {
 	return (
@@ -27,6 +28,13 @@ function App() {
 									<Route excat path='/cart' component={Cart} />
 								) : (
 									<Route exact path='/cart'>
+										<Redirect to='/home' />
+									</Route>
+								)}
+								{SetUser.getUser() ? (
+									<Route excat path='/checkout' component={CheckoutForm} />
+								) : (
+									<Route exact path='/checkout'>
 										<Redirect to='/home' />
 									</Route>
 								)}

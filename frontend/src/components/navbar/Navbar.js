@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { SetUser } from '../../services/storage.service';
 import LoginRegister from '../loginRegister/LoginRegister';
 import { useContext } from 'react';
@@ -155,14 +155,17 @@ export default function PrimarySearchAppBar() {
 							</CustomListItem>
 							<CustomListItem
 								button
-								key='New Products'
+								key='Checkout'
 								selected={selectedIndex === 1}
-								onClick={(event) => handleListItemClick(event, 1)}
+								onClick={(event) => {
+									handleListItemClick(event, 1);
+									if (!SetUser.getUser()) setOpen(true);
+								}}
 							>
-								<NavLink to='/loans' activeClassName={classes.link}>
+								<NavLink to={open ? '/home' : '/checkout'} activeClassName={classes.link}>
 									<ListItemText
 										style={{ textAlign: 'left', paddingLeft: '10px' }}
-										primary='New Products'
+										primary='Checkout'
 									/>
 								</NavLink>
 							</CustomListItem>
@@ -172,7 +175,7 @@ export default function PrimarySearchAppBar() {
 								selected={selectedIndex === 2}
 								onClick={(event) => handleListItemClick(event, 2)}
 							>
-								<NavLink to='/communication' activeClassName={classes.link}>
+								<NavLink to='/....' activeClassName={classes.link}>
 									<ListItemText
 										style={{ textAlign: 'left', paddingLeft: '10px' }}
 										primary='Contact Us'

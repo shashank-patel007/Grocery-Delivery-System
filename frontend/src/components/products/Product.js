@@ -32,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
 		height: '106',
 		width: '100'
 	},
-	expand: {
+	defaultButton: {
 		backgroundColor: '#f50057',
 		fontSize: '1.2rem',
 		color: '#fff',
-		borderRadius: '20%',
 		padding: '6px',
 
 		'&:hover': {
@@ -51,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
 			outline: 'none',
 			border: 'none'
 		}
+	},
+	iconButton: {
+		borderRadius: '20%'
 	}
 }));
 
@@ -111,7 +113,7 @@ const Product = ({ product }) => {
 								if (SetUser.getUser()) addProduct(product);
 								else setOpen(true);
 							}}
-							className={classes.expand}
+							className={classes.defaultButton}
 						>
 							ADD
 						</Button>
@@ -126,7 +128,7 @@ const Product = ({ product }) => {
 										else removeProduct(product);
 									} else setOpen(true);
 								}}
-								className={classes.expand}
+								className={clsx(classes.iconButton, classes.defaultButton)}
 							>
 								<RemoveIcon />
 							</IconButton>
@@ -148,7 +150,7 @@ const Product = ({ product }) => {
 									if (SetUser.getUser()) increase(product, true);
 									else setOpen(true);
 								}}
-								className={classes.expand}
+								className={clsx(classes.iconButton, classes.defaultButton)}
 								style={{
 									marginLeft: 'auto'
 								}}
@@ -163,35 +165,5 @@ const Product = ({ product }) => {
 		</Fragment>
 	);
 };
-
-{
-	/* <Fragment>
-	<IconButton
-		variant='contained'
-		color='secondary'
-		onClick={() => setCount(count - 1)}
-		className={classes.expand}
-	>
-		<RemoveIcon />
-	</IconButton>
-
-	<div
-		style={{ display: 'inline-block', width: '100%', textAlign: 'center', fontSize: '1.2rem' }}
-	>
-		{count}
-	</div>
-	<IconButton
-		variant='outlined'
-		color='secondary'
-		onClick={() => setCount(count + 1)}
-		className={classes.expand}
-		style={{
-			marginLeft: 'auto'
-		}}
-	>
-		<AddIcon />
-	</IconButton>
-</Fragment> */
-}
 
 export default Product;

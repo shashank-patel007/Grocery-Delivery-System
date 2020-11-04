@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
@@ -87,6 +87,7 @@ const Register = (props) => {
 			props.handleClose();
 			getCart();
 			Alert.success('Registered Succesfully...');
+			window.location.reload();
 		} else if (res.error.mobile_no && res.error.email) {
 			setRegisterState({ ...registerState, email: '', mobile_no: '' });
 			setEmailResult({ isError: true, message: 'Email already exits..' });
