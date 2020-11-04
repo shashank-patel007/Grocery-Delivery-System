@@ -12,6 +12,7 @@ import { SetUser } from '../../services/storage.service';
 import LoginRegister from '../loginRegister/LoginRegister';
 import { useContext } from 'react';
 import ProductContext from '../../context/product/ProductContext';
+import ContactUs from '../contact/ContactUs';
 
 const customTheme = createMuiTheme({
 	palette: {
@@ -114,11 +115,11 @@ const CustomButton = withStyles({
 	}
 })(Button);
 
-export default function PrimarySearchAppBar() {
+const Navbar = () => {
 	const classes = useStyles();
 	const { getProducts } = useContext(ProductContext);
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
-	const [ open, setOpen ] = useState(false);
+	const [ open, setOpen ] = useState({ login: false, contactUs: false });
 
 	const history = useHistory();
 
@@ -130,7 +131,7 @@ export default function PrimarySearchAppBar() {
 		if (SetUser.getUser()) {
 			history.push('/cart');
 		} else {
-			setOpen(true);
+			setOpen({ ...open, login: true });
 		}
 	};
 
@@ -159,10 +160,13 @@ export default function PrimarySearchAppBar() {
 								selected={selectedIndex === 1}
 								onClick={(event) => {
 									handleListItemClick(event, 1);
-									if (!SetUser.getUser()) setOpen(true);
+									if (!SetUser.getUser()) setOpen({ ...open, login: true });
 								}}
 							>
-								<NavLink to={open ? '/home' : '/checkout'} activeClassName={classes.link}>
+								<NavLink
+									to={open.login ? '/home' : '/checkout'}
+									activeClassName={!open.login && classes.link}
+								>
 									<ListItemText
 										style={{ textAlign: 'left', paddingLeft: '10px' }}
 										primary='Checkout'
@@ -173,9 +177,12 @@ export default function PrimarySearchAppBar() {
 								button
 								key='Contact Us'
 								selected={selectedIndex === 2}
-								onClick={(event) => handleListItemClick(event, 2)}
+								onClick={(event) => {
+									handleListItemClick(event, 2);
+									setOpen({ ...open, contactUs: true });
+								}}
 							>
-								<NavLink to='/....' activeClassName={classes.link}>
+								<NavLink to='#'>
 									<ListItemText
 										style={{ textAlign: 'left', paddingLeft: '10px' }}
 										primary='Contact Us'
@@ -193,13 +200,18 @@ export default function PrimarySearchAppBar() {
 					</Toolbar>
 				</AppBar>
 			</div>
-			{open && <LoginRegister handleClose={() => setOpen(false)} open={open} />}
+			{open.login && <LoginRegister handleClose={() => setOpen({ ...open, login: false })} open={open.login} />}
+			{open.contactUs && (
+				<ContactUs handleClose={() => setOpen({ ...open, contactUs: false })} open={open.contactUs} />
+			)}
 		</MuiThemeProvider>
 	);
-}
+};
 
 const flexContainer = {
 	display: 'flex',
 	flexDirection: 'row',
 	padding: 0
 };
+
+export default Navbar;

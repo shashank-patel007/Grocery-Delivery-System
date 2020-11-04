@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react';
-import { fade, withStyles, makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
@@ -69,42 +69,6 @@ const theme = createMuiTheme({
 });
 
 const useStyles = makeStyles({
-	root: { zIndex: 1 },
-	button: {
-		fontSize: '1em',
-		color: '#2B2F4C',
-		marginRight: '30px',
-		border: 'none',
-		outline: 'none'
-	},
-	defaultButton: {
-		'&:hover': {
-			boxShadow: 'none',
-			border: 'none',
-			outline: 'none'
-		},
-		'&:active': {
-			boxShadow: 'none',
-			border: 'none',
-			outline: 'none'
-		},
-		'&:focus': {
-			border: 'none',
-			outline: 'none'
-		}
-	},
-	user: {
-		background: '#F9F9F9',
-		borderRadius: '10px',
-		fontSize: '1em',
-		color: '#2B2F4C',
-		marginRight: '30px',
-		'&:hover': {
-			backgroundColor: fade('#F9F9F9', 0.5),
-			boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.25)'
-		},
-		boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.50)'
-	},
 	form: {
 		alignItems: 'center',
 		textAlign: 'center'
@@ -126,37 +90,28 @@ const LoginRegister = ({ handleClose, open }) => {
 	};
 
 	return (
-		<Fragment>
-			{/* <IconButton
-				color='inherit'
-				className={clsx(classes.button, classes.user, classes.defaultButton)}
-				onClick={handleClickOpen}
-			>
-				{authContext.isLoggedIn ? <span>Welcome {authContext.name} </span> : <span> Login/SignUp </span>}
-			</IconButton> */}
-			<Dialog
-				onClose={handleClose}
-				aria-labelledby='customized-dialog-title'
-				open={open}
-				fullWidth={true}
-				maxWidth={'xs'}
-			>
-				<DialogTitle id='customized-dialog-title' onClose={handleClose}>
-					{isLogin ? 'Login With' : 'Register With'}
-				</DialogTitle>
-				<DialogContent>
-					<div className={classes.form}>
-						<ThemeProvider theme={theme}>
-							{isLogin ? (
-								<Login setToRegister={setToRegister} handleClose={handleClose} />
-							) : (
-								<Register setToLogin={setToLogin} handleClose={handleClose} />
-							)}
-						</ThemeProvider>
-					</div>
-				</DialogContent>
-			</Dialog>
-		</Fragment>
+		<Dialog
+			onClose={handleClose}
+			aria-labelledby='customized-dialog-title'
+			open={open}
+			fullWidth={true}
+			maxWidth={'xs'}
+		>
+			<DialogTitle id='customized-dialog-title' onClose={handleClose}>
+				{isLogin ? 'Login With' : 'Register With'}
+			</DialogTitle>
+			<DialogContent>
+				<div className={classes.form}>
+					<ThemeProvider theme={theme}>
+						{isLogin ? (
+							<Login setToRegister={setToRegister} handleClose={handleClose} />
+						) : (
+							<Register setToLogin={setToLogin} handleClose={handleClose} />
+						)}
+					</ThemeProvider>
+				</div>
+			</DialogContent>
+		</Dialog>
 	);
 };
 
