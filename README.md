@@ -61,7 +61,7 @@ Below are the screenshots depicting the key functionalities and pages of the app
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
+To get a local copy up & running follow these simple steps.
 
 ### Prerequisites
 
